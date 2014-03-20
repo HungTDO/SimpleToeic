@@ -7,7 +7,7 @@ import com.framgia.simpletoeic.BaseSimpleToeicActivity;
 import com.framgia.simpletoeic.R;
 
 public class SplashScreen extends BaseSimpleToeicActivity {
-
+	int a;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
