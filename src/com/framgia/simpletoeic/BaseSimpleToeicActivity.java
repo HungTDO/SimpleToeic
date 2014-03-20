@@ -11,6 +11,8 @@ import android.os.Bundle;
  * */
 public class BaseSimpleToeicActivity extends Activity {
 
+	private int modifier;
+	
 	protected BaseSimpleToeicActivity self;
 
 	protected SimpleToeicAppplication app;
