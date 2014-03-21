@@ -4,5 +4,10 @@
     <string name="app_name">SimpleToeic</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-
+    
+	<string name="text_menu_read">Reading</string>
+	<string name="text_menu_listen">Listening</string>
+	<string name="text_menu_tip">Tips</string>
+	<string name="text_menu_setting">Settings</string>
+	<string name="text_menu_about">About</string>
 </resources>
