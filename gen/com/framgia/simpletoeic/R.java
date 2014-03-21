@@ -126,6 +126,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         /**  MENU COlOR 
          */
         public static final int color_menu_bkg=0x7f050002;
+        public static final int color_menu_text=0x7f050003;
         public static final int color_white=0x7f050000;
     }
     public static final class dimen {
