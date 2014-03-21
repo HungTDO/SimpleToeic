@@ -1,11 +1,12 @@
 package com.framgia.simpletoeic;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -14,18 +15,30 @@ import android.widget.Toast;
  * @author HUNGTDO Base Simple Toeic class. Extended to another activity
  * 
  * */
-public class BaseSimpleToeicActivity extends Activity {
+public class BaseSimpleToeicActivity extends FragmentActivity {
 
+	public static final boolean DEBUG_MODE = true;
+	
 	protected BaseSimpleToeicActivity self;
 
 	protected SimpleToeicAppplication app;
+	
+	protected FragmentManager frgManager;
+	
+	public static String TAG = "";
 
+	{
+		TAG = this.getClass().getSimpleName();
+	}
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		self = this;
 		app = (SimpleToeicAppplication) getApplication();
+		frgManager = getSupportFragmentManager();
+		
 	}
 
 	protected void goActivity(Context context, Class<?> cls) {
