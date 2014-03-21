@@ -12,7 +12,7 @@
         <Button
             android:id="@+id/btnRead"
             style="@style/style_menu_button"
-            android:text="@string/text_menu_read" />
+            android:text="@string/text_menu_read"/>
 
         <View style="@style/style_menu_devide" />
 
