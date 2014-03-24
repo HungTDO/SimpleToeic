@@ -1,29 +1,74 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_white" >
 
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:background="@drawable/shape_bkg_corner"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:background="@color/color_white"
+        android:gravity="center"
         android:padding="10dp" >
 
-        <TextView
-            android:id="@+id/tvPart"
-            style="@style/style_menu_button"
-            android:text="@string/text_menu_read" />
-
-        <View style="@style/style_menu_devide" />
-
-        <ListView
-            android:id="@+id/listExam"
+        <LinearLayout
+            android:id="@+id/layoutExam"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:cacheColorHint="@color/color_transparent" />
-    </LinearLayout>
+            android:layout_height="match_parent"
+            android:background="@drawable/shape_bkg_corner"
+            android:orientation="vertical"
+            android:padding="10dp"
+            android:visibility="visible" >
+
+            <TextView
+                android:id="@+id/tvPartHeader"
+                style="@style/style_menu_button"
+                android:text="@string/text_menu_read"
+                android:textStyle="bold" />
+
+            <View
+                style="@style/style_menu_devide"
+                android:layout_height="3dp" />
+
+            <ListView
+                android:id="@+id/listExam"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:cacheColorHint="@color/color_transparent"
+                android:divider="#E0E0E0"
+                android:dividerHeight="1dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutPart"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/shape_bkg_corner"
+            android:orientation="vertical"
+            android:padding="10dp"
+            android:visibility="gone" >
+
+            <TextView
+                android:id="@+id/tvPartName"
+                style="@style/style_menu_button"
+                android:onClick="onClickTitle"
+                android:text="@string/text_part"
+                android:textStyle="bold" />
+
+            <View
+                style="@style/style_menu_devide"
+                android:layout_height="3dp" />
+
+            <ListView
+                android:id="@+id/listPart"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:cacheColorHint="@color/color_transparent"
+                android:divider="#E0E0E0"
+                android:dividerHeight="1dp" />
+        </LinearLayout>
+    </FrameLayout>
 
 </RelativeLayout>

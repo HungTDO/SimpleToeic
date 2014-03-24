@@ -10,4 +10,6 @@
 	<string name="text_menu_tip">Tips</string>
 	<string name="text_menu_setting">Settings</string>
 	<string name="text_menu_about">About</string>
+	
+	<string name="text_part">PART</string>
 </resources>

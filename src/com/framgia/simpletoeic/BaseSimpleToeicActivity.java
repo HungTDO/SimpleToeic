@@ -1,6 +1,8 @@
 package com.framgia.simpletoeic;
 
 import com.framgia.simpletoeic.database.AssetDatabaseUtil;
+import com.framgia.simpletoeic.database.ExamDAO;
+import com.framgia.simpletoeic.database.PartDAO;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -28,7 +30,13 @@ public class BaseSimpleToeicActivity extends FragmentActivity {
 	
 	protected FragmentManager frgManager;
 	
-	protected static SQLiteDatabase sDB = null;
+	protected SQLiteDatabase sDB = null;
+	
+	/**Exam data access object*/
+	protected ExamDAO examDAO;
+	
+	/**Part data access object*/
+	protected PartDAO partDAO;
 	
 	public static String TAG = "";
 
@@ -39,16 +47,17 @@ public class BaseSimpleToeicActivity extends FragmentActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		//App content
 		self = this;
 		app = (SimpleToeicAppplication) getApplication();
 		frgManager = getSupportFragmentManager();
 		
+		//Database
 		AssetDatabaseUtil db = new AssetDatabaseUtil(self);
-		if(sDB == null)
-		{
-			sDB = db.openDatabase();
-		}
+		sDB = db.openDatabase();
+		
+		examDAO = ExamDAO.getInstance(sDB);
+		partDAO = PartDAO.getInstance(sDB);
 		
 	}
 
