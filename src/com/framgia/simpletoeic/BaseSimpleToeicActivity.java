@@ -1,9 +1,12 @@
 package com.framgia.simpletoeic;
 
+import com.framgia.simpletoeic.database.AssetDatabaseUtil;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -25,6 +28,8 @@ public class BaseSimpleToeicActivity extends FragmentActivity {
 	
 	protected FragmentManager frgManager;
 	
+	protected static SQLiteDatabase sDB = null;
+	
 	public static String TAG = "";
 
 	{
@@ -38,6 +43,12 @@ public class BaseSimpleToeicActivity extends FragmentActivity {
 		self = this;
 		app = (SimpleToeicAppplication) getApplication();
 		frgManager = getSupportFragmentManager();
+		
+		AssetDatabaseUtil db = new AssetDatabaseUtil(self);
+		if(sDB == null)
+		{
+			sDB = db.openDatabase();
+		}
 		
 	}
 
