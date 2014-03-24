@@ -8,15 +8,22 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/shape_bkg_corner"
         android:layout_margin="10dp"
+        android:background="@drawable/shape_bkg_corner"
         android:padding="10dp" >
 
         <TextView
             android:id="@+id/tvPart"
             style="@style/style_menu_button"
             android:text="@string/text_menu_read" />
-         <View style="@style/style_menu_devide" />
+
+        <View style="@style/style_menu_devide" />
+
+        <ListView
+            android:id="@+id/listExam"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:cacheColorHint="@color/color_transparent" />
     </LinearLayout>
 
 </RelativeLayout>

@@ -1,6 +1,7 @@
 package com.framgia.simpletoeic.screen;
 
 import android.os.Bundle;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.framgia.simpletoeic.BaseSimpleToeicActivity;
@@ -16,6 +17,8 @@ public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
 
 	private SlidingMenu menu;
 
+	private ListView lvExam;
+	
 	private TextView tvPart;
 
 	@Override
@@ -24,7 +27,16 @@ public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
 		setContentView(R.layout.activity_main);
 		Debugger.d("Home Screen Started");
 
+		init();
+		
+		
+	}
+	
+	
+	private void init()
+	{
 		tvPart = (TextView) findViewById(R.id.tvPart);
+		lvExam = (ListView) findViewById(R.id.listExam);
 
 		// configure the SlidingMenu
 		menu = new SlidingMenu(self);

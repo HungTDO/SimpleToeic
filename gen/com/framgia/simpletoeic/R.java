@@ -122,12 +122,13 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int viewBehind=0x7f010002;
     }
     public static final class color {
-        public static final int color_black=0x7f050001;
+        public static final int color_black=0x7f050002;
         /**  MENU COlOR 
          */
-        public static final int color_menu_bkg=0x7f050002;
-        public static final int color_menu_text=0x7f050003;
-        public static final int color_white=0x7f050000;
+        public static final int color_menu_bkg=0x7f050003;
+        public static final int color_menu_text=0x7f050004;
+        public static final int color_transparent=0x7f050000;
+        public static final int color_white=0x7f050001;
     }
     public static final class dimen {
         /**  Default screen margins, per the Android Design guidelines. 
@@ -146,19 +147,20 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int sliding_shadow=0x7f020002;
     }
     public static final class id {
-        public static final int btnAbout=0x7f04000b;
-        public static final int btnListen=0x7f040008;
-        public static final int btnRead=0x7f040007;
-        public static final int btnSetting=0x7f04000a;
-        public static final int btnTip=0x7f040009;
+        public static final int btnAbout=0x7f04000c;
+        public static final int btnListen=0x7f040009;
+        public static final int btnRead=0x7f040008;
+        public static final int btnSetting=0x7f04000b;
+        public static final int btnTip=0x7f04000a;
         public static final int container=0x7f040005;
         public static final int fullscreen=0x7f040003;
         public static final int left=0x7f040000;
+        public static final int listExam=0x7f040007;
         public static final int margin=0x7f040002;
-        public static final int menu_frame=0x7f04000c;
+        public static final int menu_frame=0x7f04000d;
         public static final int right=0x7f040001;
         public static final int selected_view=0x7f040004;
-        public static final int slidingmenumain=0x7f04000d;
+        public static final int slidingmenumain=0x7f04000e;
         public static final int tvPart=0x7f040006;
     }
     public static final class layout {
