@@ -29,7 +29,7 @@ import com.framgia.simpletoeic.screen.util.Debugger;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
 public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
-		IMenuProcessing, OnItemClickListener, OnClickListener {
+		IMenuProcessing, OnClickListener {
 
 	private SlidingMenu menu;
 
@@ -85,7 +85,9 @@ public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
 
 		layoutPart.setVisibility(View.GONE);
 		layoutExam.setVisibility(View.VISIBLE);
-		lvExam.setOnItemClickListener(this);
+		lvExam.setOnItemClickListener(onExamclick);
+		lvPart.setOnItemClickListener(onPartClick);
+		
 		tvPartName.setClickable(true);
 		tvPartName.setFocusable(true);
 		tvPartName.setOnClickListener(this);
@@ -149,16 +151,30 @@ public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
 		}
 	}
 
-	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) {
+	private OnItemClickListener onExamclick = new OnItemClickListener() {
 
-		int examID = ((ExamPart) ((ListExamAdapter) parent.getAdapter())
-				.getItem(position)).getExamId();
-		// Get all part by exam id
-		Cursor mCursorPart = partDAO.getAllPart(examID);
-		showPart(position, mCursorPart);
-	}
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position,
+				long id) {
+			
+			int examID = ((ExamPart) ((ListExamAdapter) parent.getAdapter())
+					.getItem(position)).getExamId();
+			// Get all part by exam id
+			Cursor mCursorPart = partDAO.getAllPart(examID);
+			showPart(position, mCursorPart);
+		}
+	};
+	
+	private OnItemClickListener onPartClick = new OnItemClickListener() {
+
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position,
+				long id) {
+			int partID = ((ExamPart) ((ListExamAdapter) parent.getAdapter())
+					.getItem(position)).getId();
+
+		}
+	};
 
 	private void showPart(int position, Cursor mCursorPart) {
 		if (mCursorPart != null) {
@@ -302,7 +318,7 @@ public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
 						310.0f, false);
 			}
 
-			rotation.setDuration(400);
+			rotation.setDuration(500);
 			rotation.setFillAfter(false);
 			rotation.setInterpolator(new DecelerateInterpolator());
 			rotation.setAnimationListener(new DisplayNextView1(mPosition));
