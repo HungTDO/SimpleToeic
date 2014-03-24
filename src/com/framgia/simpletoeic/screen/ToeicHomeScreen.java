@@ -1,5 +1,6 @@
 package com.framgia.simpletoeic.screen;
 
+import android.database.Cursor;
 import android.os.Bundle;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -25,9 +26,19 @@ public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		Debugger.d("Home Screen Started");
+		Debugger.i("Home Screen Started");
 
 		init();
+		
+		Cursor mCursorExamShowAll= examDAO.getAllExam();
+		if(mCursorExamShowAll != null)
+		{
+			int count = mCursorExamShowAll.getCount();
+			Debugger.i("DB -> Exam table count: " + count);
+			while(mCursorExamShowAll.moveToNext()){
+				
+			}
+		}
 		
 		
 	}
