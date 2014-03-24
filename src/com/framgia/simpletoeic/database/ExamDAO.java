@@ -39,7 +39,7 @@ public class ExamDAO {
 	/**
 	 * Close database access
 	 * */
-	public void closeDb() {
+	public void close() {
 		if (db != null) {
 			db.close();
 		}
@@ -49,6 +49,7 @@ public class ExamDAO {
 	 * Get all exam in database
 	 * 
 	 * @return Cursor data filled
+	 * 
 	 * */
 	public Cursor getAllExam() {
 		Cursor cursor = null;
