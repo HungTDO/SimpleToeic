@@ -1,6 +1,7 @@
 package com.framgia.simpletoeic.screen;
 
 import android.os.Bundle;
+import android.widget.TextView;
 
 import com.framgia.simpletoeic.BaseSimpleToeicActivity;
 import com.framgia.simpletoeic.R;
@@ -15,11 +16,15 @@ public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
 
 	private SlidingMenu menu;
 
+	private TextView tvPart;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		Debugger.d("Home Screen Started");
+
+		tvPart = (TextView) findViewById(R.id.tvPart);
 
 		// configure the SlidingMenu
 		menu = new SlidingMenu(self);
@@ -37,7 +42,7 @@ public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
 				.replace(R.id.menu_frame, new ToeicMenuFragment()).commit();
 	}
 
-	/**Close sliding menu*/
+	/** Close sliding menu */
 	private void closeMenu() {
 		if (menu != null && menu.isShown()) {
 			menu.toggle();
@@ -47,6 +52,27 @@ public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
 	@Override
 	public void onFragToActivity(EMenu menu) {
 		closeMenu();
-		showShortToastMessage("Click: " + menu.toString());
+		String part = menu.toString();
+		tvPart.setText(part);
+		showShortToastMessage("Click: " + part);
+		switch (menu) {
+		case READING:
+			break;
+		case LISTENING:
+
+			break;
+		case TIP:
+
+			break;
+		case SETTINGS:
+
+			break;
+		case ABOUT:
+
+			break;
+
+		default:
+			break;
+		}
 	}
 }
