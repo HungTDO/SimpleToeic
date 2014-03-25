@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_white"
+    android:padding="10dp" >
+
+    <include
+        android:id="@+id/readingBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        layout="@layout/layout_reading_bar" />
+
+    <include
+        android:id="@+id/dialogContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/readingBar"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        layout="@layout/layout_dialog_content" />
+
+    <include
+        android:id="@+id/questionContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dialogContent"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        layout="@layout/layout_dialog_question" />
+
+</RelativeLayout>

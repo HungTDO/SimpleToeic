@@ -21,8 +21,8 @@ public class SplashScreen extends BaseSimpleToeicActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		closeDatabase();
 		setContentView(R.layout.splash_screen);
-
 		handler = new Handler();
 
 		runnable = new Runnable() {
