@@ -27,7 +27,7 @@ public class PartDAO {
 		if (mExamObj == null) {
 			mExamObj = new PartDAO(db);
 		}
-
+		mExamObj.db = db;
 		return mExamObj;
 	}
 

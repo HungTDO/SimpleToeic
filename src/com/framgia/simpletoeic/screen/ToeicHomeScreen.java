@@ -25,11 +25,12 @@ import com.framgia.simpletoeic.database.ExamPart;
 import com.framgia.simpletoeic.fragment.ToeicMenuFragment;
 import com.framgia.simpletoeic.ie.EMenu;
 import com.framgia.simpletoeic.ie.IMenuProcessing;
+import com.framgia.simpletoeic.ie.Keys;
 import com.framgia.simpletoeic.screen.util.Debugger;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
 public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
-		IMenuProcessing, OnItemClickListener, OnClickListener {
+		IMenuProcessing, OnClickListener {
 
 	private SlidingMenu menu;
 
@@ -48,7 +49,6 @@ public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
 		Debugger.i("Home Screen Started");
 
 		init();
-
 		Cursor mCursorExamShowAll = examDAO.getAllExam();
 		if (mCursorExamShowAll != null) {
 			int count = mCursorExamShowAll.getCount();
@@ -85,7 +85,9 @@ public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
 
 		layoutPart.setVisibility(View.GONE);
 		layoutExam.setVisibility(View.VISIBLE);
-		lvExam.setOnItemClickListener(this);
+		lvExam.setOnItemClickListener(onExamclick);
+		lvPart.setOnItemClickListener(onPartClick);
+		
 		tvPartName.setClickable(true);
 		tvPartName.setFocusable(true);
 		tvPartName.setOnClickListener(this);
@@ -149,16 +151,35 @@ public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
 		}
 	}
 
-	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) {
+	private OnItemClickListener onExamclick = new OnItemClickListener() {
 
-		int examID = ((ExamPart) ((ListExamAdapter) parent.getAdapter())
-				.getItem(position)).getExamId();
-		// Get all part by exam id
-		Cursor mCursorPart = partDAO.getAllPart(examID);
-		showPart(position, mCursorPart);
-	}
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position,
+				long id) {
+			
+			int examID = ((ExamPart) ((ListExamAdapter) parent.getAdapter())
+					.getItem(position)).getExamId();
+			// Get all part by exam id
+			Cursor mCursorPart = partDAO.getAllPart(examID);
+			showPart(position, mCursorPart);
+		}
+	};
+	
+	private OnItemClickListener onPartClick = new OnItemClickListener() {
+
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position,
+				long id) {
+			
+			int partID = ((ExamPart) ((ListExamAdapter) parent.getAdapter())
+					.getItem(position)).getId();
+			//Go to Dialog
+			Bundle b = new Bundle();
+			b.putInt(Keys.BKEY_PARTID, partID);
+			goActivity(self, ReadingScreen.class, b);
+			
+		}
+	};
 
 	private void showPart(int position, Cursor mCursorPart) {
 		if (mCursorPart != null) {
@@ -178,7 +199,7 @@ public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
 			ListExamAdapter adapter = new ListExamAdapter(self, list);
 			lvPart.setAdapter(adapter);
 
-			applyRotation(position, 0, 90);
+			applyRotation(position, 0, 90);////Add comment
 		}
 	}
 
@@ -302,7 +323,7 @@ public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
 						310.0f, false);
 			}
 
-			rotation.setDuration(400);
+			rotation.setDuration(500);
 			rotation.setFillAfter(false);
 			rotation.setInterpolator(new DecelerateInterpolator());
 			rotation.setAnimationListener(new DisplayNextView1(mPosition));
@@ -311,12 +332,15 @@ public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
 		}
 	}
 
+	@Override
+	public void onBackPressed() {
+		closeDatabase();
+		super.onBackPressed();
+	}
 	
 	@Override
 	protected void onDestroy() {
-		// Close DB
-		sDB.close();
-
+		closeDatabase();
 		super.onDestroy();
 
 	}

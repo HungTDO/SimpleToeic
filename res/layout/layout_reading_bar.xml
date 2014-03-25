@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="@drawable/shape_bkg_corner" 
+    android:gravity="center_vertical"
+    android:padding="3dp" >
+
+    <TextView
+        android:id="@+id/tvReadingHeader"
+        style="@style/style_menu_button"
+        android:layout_width="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        android:text="Reading Test - Part 1"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvReadingTime"
+        style="@style/style_menu_button"
+        android:layout_width="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/tvReadingHeader"
+        android:text="13:39"
+        android:textSize="16sp" />
+
+</RelativeLayout>
