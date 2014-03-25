@@ -15,11 +15,21 @@ public class AssetDatabaseUtil {
 	private Context context;
 
 	private static final String DB_NAME = "stoeic.db";
+	
+	private static AssetDatabaseUtil self;
 
 	public AssetDatabaseUtil(Context context) {
 		this.context = context;
 	}
 
+	public static AssetDatabaseUtil getDefaultInstance(Context context)
+	{
+		if(self == null){
+			self = new AssetDatabaseUtil(context);
+		}
+		return self;
+	}
+	
 	public SQLiteDatabase openDatabase() {
 		// Get absolute path of database
 		File dbFile = context.getDatabasePath(DB_NAME);

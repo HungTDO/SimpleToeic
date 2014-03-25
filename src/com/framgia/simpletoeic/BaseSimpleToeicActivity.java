@@ -1,9 +1,5 @@
 package com.framgia.simpletoeic;
 
-import com.framgia.simpletoeic.database.AssetDatabaseUtil;
-import com.framgia.simpletoeic.database.ExamDAO;
-import com.framgia.simpletoeic.database.PartDAO;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -16,6 +12,11 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.framgia.simpletoeic.database.AssetDatabaseUtil;
+import com.framgia.simpletoeic.database.DialogDAO;
+import com.framgia.simpletoeic.database.ExamDAO;
+import com.framgia.simpletoeic.database.PartDAO;
+
 /**
  * @author HUNGTDO Base Simple Toeic class. Extended to another activity
  * 
@@ -23,44 +24,67 @@ import android.widget.Toast;
 public class BaseSimpleToeicActivity extends FragmentActivity {
 
 	public static final boolean DEBUG_MODE = true;
-	
+
 	protected BaseSimpleToeicActivity self;
 
 	protected SimpleToeicAppplication app;
-	
+
 	protected FragmentManager frgManager;
-	
-	protected SQLiteDatabase sDB = null;
-	
-	/**Exam data access object*/
+
+	private SQLiteDatabase sDB = null;
+
+	/** Exam data access object */
 	protected ExamDAO examDAO;
-	
-	/**Part data access object*/
+
+	/** Part data access object */
 	protected PartDAO partDAO;
-	
+
+	/** Part data access object */
+	protected DialogDAO dialogDAO;
+
 	public static String TAG = "";
 
 	{
 		TAG = this.getClass().getSimpleName();
 	}
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//App content
+		// App content
 		self = this;
 		app = (SimpleToeicAppplication) getApplication();
 		frgManager = getSupportFragmentManager();
-		
-		//Database
-		AssetDatabaseUtil db = new AssetDatabaseUtil(self);
-		sDB = db.openDatabase();
-		
-		examDAO = ExamDAO.getInstance(sDB);
-		partDAO = PartDAO.getInstance(sDB);
-		
+		openDatabase();
 	}
 
+	/**
+	 * Method to management database, first: check and close current DB, then open database again.<br/>
+	 * <b>Note</b>: Always use this method before access to database
+	 * */
+	protected void openDatabase() {
+		closeDatabase();
+		// Database
+		AssetDatabaseUtil db = AssetDatabaseUtil.getDefaultInstance(self);
+		this.sDB = db.openDatabase();
+		examDAO = ExamDAO.getInstance(sDB);
+		partDAO = PartDAO.getInstance(sDB);
+		dialogDAO = DialogDAO.getInstance(sDB);
+
+	}
+
+	protected void closeDatabase(){
+		if(sDB != null && sDB.isOpen())
+		{
+			sDB.close();
+		}
+		sDB = null;
+	}
+	
+	protected boolean isDbOpen(){
+		return (sDB != null) ? sDB.isOpen() : false;
+	}
+	
 	protected void goActivity(Context context, Class<?> cls) {
 		Intent intent = new Intent(context, cls);
 		startActivity(intent);
@@ -85,7 +109,7 @@ public class BaseSimpleToeicActivity extends FragmentActivity {
 		intent.putExtras(bundle);
 		startActivity(intent);
 	}
-	
+
 	// ======================= KEYBOARD MANAGER =======================
 	/**
 	 * Show soft keyboard
@@ -110,111 +134,120 @@ public class BaseSimpleToeicActivity extends FragmentActivity {
 		((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE))
 				.hideSoftInputFromWindow(editText.getWindowToken(), 0);
 	}
-	
+
 	// ======================= DIALOG MANAGER =======================
 
+	/**
+	 * Show confirm dialog
+	 * 
+	 * @param title
+	 * @param messageId
+	 * @param positiveLabelId
+	 * @param negativeLabelId
+	 * @param positiveOnClick
+	 * @param negativeOnClick
+	 */
+	public void showDialog(int titleId, int messageId, int positiveLabelId,
+			int negativeLabelId,
+			DialogInterface.OnClickListener positiveOnClick,
+			DialogInterface.OnClickListener negativeOnClick) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(getString(titleId));
+		builder.setMessage(getString(messageId));
+		builder.setPositiveButton(getString(positiveLabelId), positiveOnClick);
+		builder.setNegativeButton(getString(negativeLabelId), negativeOnClick);
+		AlertDialog alert = builder.create();
+		alert.show();
+	}
 
-		/**
-		 * Show confirm dialog
-		 * 
-		 * @param title
-		 * @param messageId
-		 * @param positiveLabelId
-		 * @param negativeLabelId
-		 * @param positiveOnClick
-		 * @param negativeOnClick
-		 */
-		public void showDialog(int titleId, int messageId, int positiveLabelId,
-				int negativeLabelId,
-				DialogInterface.OnClickListener positiveOnClick,
-				DialogInterface.OnClickListener negativeOnClick) {
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setTitle(getString(titleId));
-			builder.setMessage(getString(messageId));
-			builder.setPositiveButton(getString(positiveLabelId), positiveOnClick);
-			builder.setNegativeButton(getString(negativeLabelId), negativeOnClick);
-			AlertDialog alert = builder.create();
-			alert.show();
-		}
+	/**
+	 * Get dialog confirm
+	 * 
+	 * @param title
+	 * @param messageId
+	 * @param positiveLabelId
+	 * @param negativeLabelId
+	 * @param positiveOnClick
+	 * @param negativeOnClick
+	 */
+	public void showDialog(String title, String message, String positiveLabel,
+			String negativeLabel,
+			DialogInterface.OnClickListener positiveOnClick,
+			DialogInterface.OnClickListener negativeOnClick, boolean isCancelled) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(title);
+		builder.setMessage(message);
+		builder.setPositiveButton(positiveLabel, positiveOnClick);
+		builder.setNegativeButton(negativeLabel, negativeOnClick);
+		builder.setCancelable(isCancelled);
+		AlertDialog alert = builder.create();
+		alert.show();
+	}
 
-		/**
-		 * Get dialog confirm
-		 * 
-		 * @param title
-		 * @param messageId
-		 * @param positiveLabelId
-		 * @param negativeLabelId
-		 * @param positiveOnClick
-		 * @param negativeOnClick
-		 */
-		public void showDialog(String title, String message, String positiveLabel,
-				String negativeLabel,
-				DialogInterface.OnClickListener positiveOnClick,
-				DialogInterface.OnClickListener negativeOnClick, boolean isCancelled) {
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setTitle(title);
-			builder.setMessage(message);
-			builder.setPositiveButton(positiveLabel, positiveOnClick);
-			builder.setNegativeButton(negativeLabel, negativeOnClick);
-			builder.setCancelable(isCancelled);
-			AlertDialog alert = builder.create();
-			alert.show();
-		}
-		
-		/**
-		 * Show information dialog
-		 * 
-		 * @param messageId
-		 * @param positiveLabelId
-		 * @param positiveOnClick
-		 */
-		public void showDialog(int messageId, int positiveLabelId,
-				DialogInterface.OnClickListener positiveOnClick, boolean isCancelled) {
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setTitle(""/* getString(R.string.app_name) */);
-			builder.setMessage(getString(messageId));
-			builder.setPositiveButton(getString(positiveLabelId), positiveOnClick);
-			builder.setCancelable(isCancelled);
-			AlertDialog alert = builder.create();
-			alert.show();
-		}
+	/**
+	 * Show information dialog
+	 * 
+	 * @param messageId
+	 * @param positiveLabelId
+	 * @param positiveOnClick
+	 */
+	public void showDialog(int messageId, int positiveLabelId,
+			DialogInterface.OnClickListener positiveOnClick, boolean isCancelled) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(""/* getString(R.string.app_name) */);
+		builder.setMessage(getString(messageId));
+		builder.setPositiveButton(getString(positiveLabelId), positiveOnClick);
+		builder.setCancelable(isCancelled);
+		AlertDialog alert = builder.create();
+		alert.show();
+	}
 
-		// ======================= TOAST MANAGER =======================
+	// ======================= TOAST MANAGER =======================
 
-		/**
-		 *  Show long toast message
-		 * @param str alert message
-		 */
-		public void showToastMessage(String str) {
-			Toast.makeText(this, str, Toast.LENGTH_LONG).show();
-		}
+	/**
+	 * Show long toast message
+	 * 
+	 * @param str
+	 *            alert message
+	 */
+	public void showToastMessage(String str) {
+		Toast.makeText(this, str, Toast.LENGTH_LONG).show();
+	}
 
-		/**
-		 *  Show short toast message
-		 * @param str alert message
-		 */
-		public void showShortToastMessage(String str) {
-			Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
-		}
+	/**
+	 * Show short toast message
+	 * 
+	 * @param str
+	 *            alert message
+	 */
+	public void showShortToastMessage(String str) {
+		Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
+	}
 
-		/**
-		 *  Show toast message
-		 * @param str alert message
-		 * @param time long or short time
-		 *           
-		 */
-		public void showToastMessage(String str, int time) {
-			Toast.makeText(this, str, time).show();
-		}
+	/**
+	 * Show toast message
+	 * 
+	 * @param str
+	 *            alert message
+	 * @param time
+	 *            long or short time
+	 * 
+	 */
+	public void showToastMessage(String str, int time) {
+		Toast.makeText(this, str, time).show();
+	}
 
-		/**
-		 *  Show toast message
-		 * @param resId resource string
-		 * @param time long or short time
-		 *           
-		 */
-		public void showToastMessage(int resId, int time) {
-			Toast.makeText(this, resId, time).show();
-		}
+	/**
+	 * Show toast message
+	 * 
+	 * @param resId
+	 *            resource string
+	 * @param time
+	 *            long or short time
+	 * 
+	 */
+	public void showToastMessage(int resId, int time) {
+		Toast.makeText(this, resId, time).show();
+	}
 
 }

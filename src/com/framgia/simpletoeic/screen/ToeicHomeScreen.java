@@ -25,6 +25,7 @@ import com.framgia.simpletoeic.database.ExamPart;
 import com.framgia.simpletoeic.fragment.ToeicMenuFragment;
 import com.framgia.simpletoeic.ie.EMenu;
 import com.framgia.simpletoeic.ie.IMenuProcessing;
+import com.framgia.simpletoeic.ie.Keys;
 import com.framgia.simpletoeic.screen.util.Debugger;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
@@ -48,7 +49,6 @@ public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
 		Debugger.i("Home Screen Started");
 
 		init();
-
 		Cursor mCursorExamShowAll = examDAO.getAllExam();
 		if (mCursorExamShowAll != null) {
 			int count = mCursorExamShowAll.getCount();
@@ -170,9 +170,14 @@ public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
+			
 			int partID = ((ExamPart) ((ListExamAdapter) parent.getAdapter())
 					.getItem(position)).getId();
-
+			//Go to Dialog
+			Bundle b = new Bundle();
+			b.putInt(Keys.BKEY_PARTID, partID);
+			goActivity(self, ReadingScreen.class, b);
+			
 		}
 	};
 
@@ -194,7 +199,7 @@ public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
 			ListExamAdapter adapter = new ListExamAdapter(self, list);
 			lvPart.setAdapter(adapter);
 
-			applyRotation(position, 0, 90);
+			applyRotation(position, 0, 90);////Add comment
 		}
 	}
 
@@ -327,12 +332,15 @@ public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
 		}
 	}
 
+	@Override
+	public void onBackPressed() {
+		closeDatabase();
+		super.onBackPressed();
+	}
 	
 	@Override
 	protected void onDestroy() {
-		// Close DB
-		sDB.close();
-
+		closeDatabase();
 		super.onDestroy();
 
 	}

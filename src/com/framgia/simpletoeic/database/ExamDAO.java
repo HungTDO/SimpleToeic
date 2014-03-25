@@ -18,8 +18,7 @@ public class ExamDAO {
 
 	private static ExamDAO mExamObj = null;
 
-	private ExamDAO(SQLiteDatabase db) {
-		this.db = db;
+	private ExamDAO() {
 	}
 
 	/**
@@ -30,9 +29,9 @@ public class ExamDAO {
 	 * */
 	public static ExamDAO getInstance(SQLiteDatabase db) {
 		if (mExamObj == null) {
-			mExamObj = new ExamDAO(db);
+			mExamObj = new ExamDAO();
 		}
-
+		mExamObj.db = db;
 		return mExamObj;
 	}
 
