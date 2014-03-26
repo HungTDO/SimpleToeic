@@ -1,34 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/shape_bkg_corner"
     android:padding="5dp" >
 
-    <LinearLayout
+    <ViewSwitcher
+        android:id="@+id/viewSwitcher"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/shape_white_corner"
-        android:orientation="vertical" 
-        android:padding="2dp">
+        android:layout_alignParentTop="true"
+        android:inAnimation="@anim/in_animation"
+        android:outAnimation="@anim/out_animation" >
 
-        <TextView
-            android:id="@+id/tvQuestion"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="left"
-            android:text="What are you doing?"
-            android:textColor="@color/color_black"
-            android:textSize="16sp" />
+            android:background="@drawable/shape_white_corner"
+            android:orientation="vertical"
+            android:padding="2dp" >
 
-        <TextView
-            android:id="@+id/tvAnswer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:text="A: Yuchi"
-            android:textColor="@color/color_black"
-            android:textSize="16sp" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/tvQuestion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="What are you doing?"
+                android:textColor="@color/color_black"
+                android:textSize="16sp" />
 
-</ScrollView>
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <RadioButton
+                    android:id="@+id/tvAnswer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:gravity="left"
+                    android:text="A: Yuchi"
+                    android:textColor="@color/color_black"
+                    android:textSize="16sp" />
+            </RadioGroup>
+        </LinearLayout>
+    </ViewSwitcher>
+
+</RelativeLayout>
