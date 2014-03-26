@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+NEXT
+Translate: Attribute to move a view
+Second Frame
+-->
+<set xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <!-- fade -->
+    <alpha
+        android:duration="300"
+        android:fromAlpha="1.0"
+        android:toAlpha="0.5" />
+    <!-- Move -->
+    <translate
+        android:duration="500"
+        android:fromXDelta="0"
+        android:interpolator="@android:anim/accelerate_interpolator"
+        android:toXDelta="100%" />
+    <!-- Scale Image -->
+    <scale
+        android:duration="500"
+        android:fromXScale="1.0"
+        android:fromYScale="1.0"
+        android:pivotX="50%"
+        android:pivotY="50%"
+        android:toXScale="1.7"
+        android:toYScale="0.3" />
+
+</set>

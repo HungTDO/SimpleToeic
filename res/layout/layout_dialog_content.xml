@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/shape_bkg_corner"
@@ -8,11 +8,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:background="@drawable/shape_white_corner"
         android:orientation="vertical"
-        android:padding="2dp" >
+        android:padding="5dp" >
 
         <ImageView
+            android:id="@+id/imgDialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -29,4 +31,4 @@
             android:textSize="16sp" />
     </LinearLayout>
 
-</ScrollView>
+</RelativeLayout>

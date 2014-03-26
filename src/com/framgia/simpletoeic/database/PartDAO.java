@@ -1,6 +1,6 @@
 package com.framgia.simpletoeic.database;
 
-import static android.provider.BaseColumns._ID;
+import static com.framgia.simpletoeic.database.DBConstants._ID;
 import static com.framgia.simpletoeic.database.DBConstants.PART_EXAMID;
 import static com.framgia.simpletoeic.database.DBConstants.PART_NAME;
 import static com.framgia.simpletoeic.database.DBConstants.TABLE_PART;
@@ -46,12 +46,11 @@ public class PartDAO {
 	 * @return Cursor data filled
 	 * */
 	public Cursor getAllPart(int examID) {
-		Cursor cursor = null;
 		String[] columns = { _ID, PART_EXAMID, PART_NAME };
 		String orderBy = _ID + " ASC";
 		String selection = PART_EXAMID + "= ?"; 
 		String[] selectionArgs= {String.valueOf(examID)};
-		cursor = db.query(TABLE_PART, columns, selection, selectionArgs, null, null, orderBy);
-		return cursor;
+		
+		return db.query(TABLE_PART, columns, selection, selectionArgs, null, null, orderBy);
 	}
 }

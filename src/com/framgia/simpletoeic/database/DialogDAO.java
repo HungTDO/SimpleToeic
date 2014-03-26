@@ -1,6 +1,6 @@
 package com.framgia.simpletoeic.database;
 
-import static android.provider.BaseColumns._ID;
+import static com.framgia.simpletoeic.database.DBConstants._ID;
 import static com.framgia.simpletoeic.database.DBConstants.DIALOG_CONTENT;
 import static com.framgia.simpletoeic.database.DBConstants.DIALOG_IMAGEURL;
 import static com.framgia.simpletoeic.database.DBConstants.DIALOG_PARTID;
@@ -33,12 +33,11 @@ public class DialogDAO {
 	}
 	
 	public Cursor getDialogByPartID(int partId){
-		Cursor cursor = null;
 		String[] columns = {_ID, DIALOG_PARTID, DIALOG_CONTENT, DIALOG_IMAGEURL};
 		String selection = DIALOG_PARTID + " = ?";
 		String[] selectionArgs = {String.valueOf(partId)};
 		String orderBy = _ID + " ASC";
-		cursor = db.query(TABLE_DIALOG, columns, selection, selectionArgs, null, null, orderBy);
-		return cursor;
+		
+		return db.query(TABLE_DIALOG, columns, selection, selectionArgs, null, null, orderBy);
 	}
 }
