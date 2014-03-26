@@ -51,10 +51,9 @@ public class ExamDAO {
 	 * 
 	 * */
 	public Cursor getAllExam() {
-		Cursor cursor = null;
 		String[] columns = { _ID, EXAM_EXAMID, EXAM_NAME };
 		String orderBy = EXAM_EXAMID + " ASC";
-		cursor = db.query(TABLE_EXAM, columns, null, null, null, null, orderBy);
-		return cursor;
+		
+		return db.query(TABLE_EXAM, columns, null, null, null, null, orderBy);
 	}
 }

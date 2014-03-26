@@ -16,6 +16,7 @@ import com.framgia.simpletoeic.database.AssetDatabaseUtil;
 import com.framgia.simpletoeic.database.DialogDAO;
 import com.framgia.simpletoeic.database.ExamDAO;
 import com.framgia.simpletoeic.database.PartDAO;
+import com.framgia.simpletoeic.database.QuestionDAO;
 
 /**
  * @author HUNGTDO Base Simple Toeic class. Extended to another activity
@@ -39,8 +40,11 @@ public class BaseSimpleToeicActivity extends FragmentActivity {
 	/** Part data access object */
 	protected PartDAO partDAO;
 
-	/** Part data access object */
+	/** Dialog data access object */
 	protected DialogDAO dialogDAO;
+	
+	/** Question data access object */
+	protected QuestionDAO questionDAO;
 
 	public static String TAG = "";
 
@@ -70,6 +74,7 @@ public class BaseSimpleToeicActivity extends FragmentActivity {
 		examDAO = ExamDAO.getInstance(sDB);
 		partDAO = PartDAO.getInstance(sDB);
 		dialogDAO = DialogDAO.getInstance(sDB);
+		questionDAO = QuestionDAO.getInstance(sDB);
 
 	}
 
