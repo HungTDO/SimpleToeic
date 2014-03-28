@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_white"
+    android:orientation="vertical"
+    android:padding="10dp" >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@drawable/shape_bkg_corner"
+        android:padding="5dp" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/shape_bkg_corner"
+            android:orientation="vertical"
+            android:padding="5dp" >
+
+            <TextView
+                android:id="@+id/tvReadingTip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="Reading Tips"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/color_white" />
+
+            <TextView
+                android:id="@+id/tvReadingTipContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="Reading Tip Content direction"
+                android:textColor="@color/color_white" />
+
+            <TextView
+                android:id="@+id/tvReadingTipPart1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="Reading part 1 direction"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/color_white" />
+
+            <TextView
+                android:id="@+id/tvReadingTipPart1Content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="Reading part 1 direction content"
+                android:textColor="@color/color_white" />
+
+            <TextView
+                android:id="@+id/tvReadingTipPart2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="Reading part 2 direction"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/color_white" />
+
+            <TextView
+                android:id="@+id/tvReadingTipPart2Content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="Reading part 2 direction content"
+                android:textColor="@color/color_white" />
+
+            <TextView
+                android:id="@+id/tvReadingTipPart3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="Reading part 3 direction"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/color_white" />
+
+            <TextView
+                android:id="@+id/tvReadingTipPart3Content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="Reading part 3 direction content"
+                android:textColor="@color/color_white" />
+
+            <TextView
+                android:id="@+id/tvListeningTip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:paddingTop="20dip"
+                android:text="Listening Tips"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/color_white" />
+
+            <TextView
+                android:id="@+id/tvListeningTipContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="Listening Tip Content direction"
+                android:textColor="@color/color_white" />
+
+            <TextView
+                android:id="@+id/tvListeningTipPart1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="Listening part 1 direction"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/color_white" />
+
+            <TextView
+                android:id="@+id/tvListeningTipPart1Content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="Listening part 1 direction content"
+                android:textColor="@color/color_white" />
+
+            <TextView
+                android:id="@+id/tvListeningTipPart2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="Listening part 2 direction"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/color_white" />
+
+            <TextView
+                android:id="@+id/tvListeningTipPart2Content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="Listening part 2 direction content"
+                android:textColor="@color/color_white" />
+
+            <TextView
+                android:id="@+id/tvListeningTipPart3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="Listening part 3 direction"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/color_white" />
+
+            <TextView
+                android:id="@+id/tvListeningTipPart3Content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="Listening part 3 direction content"
+                android:textColor="@color/color_white" />
+
+            <TextView
+                android:id="@+id/tvListeningTipPart4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="Listening part 4 direction"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/color_white" />
+
+            <TextView
+                android:id="@+id/tvListeningTipPart4Content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="Listening part 4 direction content"
+                android:textColor="@color/color_white" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
