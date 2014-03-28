@@ -137,7 +137,7 @@ public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
 
 			break;
 		case TIP:
-
+			goActivity(self, TipScreen.class);
 			break;
 		case SETTINGS:
 
