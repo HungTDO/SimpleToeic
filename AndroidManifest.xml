@@ -29,12 +29,15 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".screen.ReadingScreen"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
         <activity
             android:name=".screen.TipScreen"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
         <activity
             android:name=".screen.ResultScreen"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
     </application>
 
