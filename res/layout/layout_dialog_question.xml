@@ -2,16 +2,17 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center"
     android:background="@drawable/shape_bkg_corner"
+    android:gravity="center"
     android:padding="5dp" >
 
     <ViewFlipper
         android:id="@+id/viewFlipper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
         android:inAnimation="@anim/out_animation"
-        android:outAnimation="@anim/in_animation" />
+        android:outAnimation="@anim/in_animation" 
+        android:clipToPadding="true"/>
 
 </RelativeLayout>
