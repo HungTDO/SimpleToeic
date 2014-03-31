@@ -44,7 +44,7 @@ public class AssetDatabaseUtil {
 		}
 
 		return SQLiteDatabase.openDatabase(dbFile.getPath(), null,
-				SQLiteDatabase.OPEN_READONLY);
+				SQLiteDatabase.OPEN_READWRITE);
 	}
 
 	/**

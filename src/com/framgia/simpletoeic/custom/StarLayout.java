@@ -9,8 +9,8 @@ import com.framgia.simpletoeic.R;
 
 public class StarLayout extends LinearLayout {
 
-	private static final int[] IMG_STAR = { R.drawable.btn_star_on,
-			R.drawable.btn_star_off };;
+	private static final int[] IMG_STAR = { R.drawable.ic_cup,
+			R.drawable.ic_cup_off };
 
 	private ImageView imgStar1, imgStar2, imgStar3;
 
@@ -43,24 +43,25 @@ public class StarLayout extends LinearLayout {
 		imgStar3.setImageResource(IMG_STAR[1]);
 	}
 
-	public void startScore(EStar star) {
+	public void setStar(EStar star) {
 		resetStar();
 
 		switch (star) {
 		case LOW:
 			imgStar1.setImageResource(IMG_STAR[0]);
 			break;
-		case HIGH:
+		case MEDIUM:
 			imgStar1.setImageResource(IMG_STAR[0]);
 			imgStar2.setImageResource(IMG_STAR[0]);
 			break;
-		case MEDIUM:
+		case HIGH:
 			imgStar1.setImageResource(IMG_STAR[0]);
 			imgStar2.setImageResource(IMG_STAR[0]);
 			imgStar3.setImageResource(IMG_STAR[0]);
 			break;
 
 		default:
+			resetStar();
 			break;
 		}
 	}

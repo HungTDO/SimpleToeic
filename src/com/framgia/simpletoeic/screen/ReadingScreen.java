@@ -12,16 +12,15 @@ import static com.framgia.simpletoeic.database.DBConstants.QUESTION_ANS_D;
 import static com.framgia.simpletoeic.database.DBConstants.QUESTION_QUESTION;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.SparseBooleanArray;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
@@ -32,13 +31,26 @@ import com.framgia.simpletoeic.database.Dialog;
 import com.framgia.simpletoeic.database.Question;
 import com.framgia.simpletoeic.ie.IReadingHandle;
 import com.framgia.simpletoeic.ie.Keys;
+import com.framgia.simpletoeic.screen.util.Debugger;
 
 public class ReadingScreen extends BaseSimpleToeicActivity implements IReadingHandle, OnClickListener{
 
+	/**count questions in a Dialog*/
+	private int mTotalQuestionDialog = 0;
+	
+	/**Current index of dialog in total Dialog*/
 	private int mCurentDialog = 0;
+	
+	/**Total questions in a Part*/
+	private int mMaxQuestion = 0;
+	
+	/**Current index of question in total Question. @See : mTotalQuestionDialog*/
+	private int mCurrentIndexQuestion = 1;
 
 	private Button btnSubmit, btnBack;
 
+	private ScrollView scrollView;
+	
 	private ViewGroup layoutBar, layoutDialog, layoutQuestion;
 
 	private TextView tvDialogContent;
@@ -49,11 +61,9 @@ public class ReadingScreen extends BaseSimpleToeicActivity implements IReadingHa
 	
 	private ViewFlipper viewFlipper;
 	
-	private int mMaxQuestion = 0;
+	private ArrayList<Boolean> listAnswers;
 	
-	private int mCurrentIndexQuestion = 1;
-	
-	private SparseBooleanArray listAnswers;
+	private int partID = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -61,10 +71,12 @@ public class ReadingScreen extends BaseSimpleToeicActivity implements IReadingHa
 		setContentView(R.layout.layout_reading);
 
 		init();
-
+		//Save true answer
+		listAnswers = new ArrayList<Boolean>();
+		
 		Bundle b = getIntent().getExtras();
 		if (b != null) {
-			int partID = b.getInt(Keys.BKEY_PARTID);
+			partID = b.getInt(Keys.BKEY_PARTID);
 			Cursor cursor = dialogDAO.getDialogByPartID(partID);
 			if (cursor != null) {
 
@@ -89,7 +101,7 @@ public class ReadingScreen extends BaseSimpleToeicActivity implements IReadingHa
 				cursor.close();
 				showShortToastMessage("Dialog Count:" + listDialog.size());
 				
-				nextDialog(mCurentDialog);
+				nextDialog();
 			}
 		}
 	}
@@ -98,6 +110,7 @@ public class ReadingScreen extends BaseSimpleToeicActivity implements IReadingHa
 		
 		btnSubmit = (Button) findViewById(R.id.btnSubmit);
 		btnBack = (Button) findViewById(R.id.btnBack);
+		scrollView = (ScrollView) findViewById(R.id.scrollView);
 		layoutBar = (ViewGroup) findViewById(R.id.readingBar);
 		layoutDialog = (ViewGroup) findViewById(R.id.dialogContent);
 		layoutQuestion = (ViewGroup) findViewById(R.id.questionContent);
@@ -107,14 +120,13 @@ public class ReadingScreen extends BaseSimpleToeicActivity implements IReadingHa
 		btnBack.setOnClickListener(this);
 		btnSubmit.setOnClickListener(this);
 		btnSubmit.setText("NEXT");
+		
+		
 
 	}
 
-	private void nextDialog(int nextDialog) {
-
-		if (nextDialog < 0)
-			return;
-
+	private void nextDialog() {
+		
 		if (listDialog != null) {
 			int size = listDialog.size();
 			if (size > mCurentDialog) {
@@ -125,6 +137,12 @@ public class ReadingScreen extends BaseSimpleToeicActivity implements IReadingHa
 				Cursor mCursorQuestion = questionDAO
 						.getQuestionByDialogId(dialogId);
 				if (mCursorQuestion != null) {
+					
+					this.mTotalQuestionDialog = mCursorQuestion.getCount();
+					mCurrentIndexQuestion = 1;//Default question index
+					viewFlipper.removeAllViews();//Remove all old Questions 
+					listQuestion = new ArrayList<Question>();
+					
 					int quesId = mCursorQuestion.getColumnIndex(_ID);
 					int quesQues = mCursorQuestion
 							.getColumnIndex(QUESTION_QUESTION);
@@ -133,7 +151,7 @@ public class ReadingScreen extends BaseSimpleToeicActivity implements IReadingHa
 					int quesC = mCursorQuestion.getColumnIndex(QUESTION_ANS_C);
 					int quesD = mCursorQuestion.getColumnIndex(QUESTION_ANS_D);
 					int correct = mCursorQuestion.getColumnIndex(QUESTION_ANS_CORRECT);
-
+					
 					while (mCursorQuestion.moveToNext()) {
 						int mQId = mCursorQuestion.getInt(quesId);
 						String mQues = mCursorQuestion.getString(quesQues);
@@ -152,14 +170,37 @@ public class ReadingScreen extends BaseSimpleToeicActivity implements IReadingHa
 						viewFlipper.addView(mQuestionView);
 						mMaxQuestion++;
 					}
-					listAnswers = new SparseBooleanArray(mMaxQuestion);
 					
+					//Default
 					mCurrentIndexQuestion = 1;
 					viewFlipper.invalidate();
 				}
 
 				// Close cursor
 				mCursorQuestion.close();
+				
+				//Increase current index
+				mCurentDialog++;
+			}
+			else
+			{
+				int countCorrect = 0;
+				int count = listAnswers.size();
+				for(int i=0; i<count; i++)
+				{
+					boolean isCorrect = listAnswers.get(i);
+					if(isCorrect) countCorrect++;
+				}
+				
+				Debugger.d("RESULT >" + mMaxQuestion + " ;Correct:" + countCorrect) ;
+				// End Part, go to Result screen
+				Bundle bundle = new Bundle();
+				bundle.putInt(Keys.BKEY_PARTID, partID);
+				bundle.putInt(Keys.BKEY_TOTAL_QUESTION, mMaxQuestion);
+				bundle.putInt(Keys.BKEY_TRUE_ANSWER, countCorrect);
+				goActivity(self, ResultScreen.class, bundle);
+				
+				finish();
 			}
 		}
 	}
@@ -168,6 +209,7 @@ public class ReadingScreen extends BaseSimpleToeicActivity implements IReadingHa
 		viewFlipper.setInAnimation(this, R.anim.in_animation1);
 		viewFlipper.setOutAnimation(this, R.anim.out_animation1);
 		viewFlipper.showNext();
+		viewFlipper.invalidate();
 		
 	}
 	
@@ -175,31 +217,59 @@ public class ReadingScreen extends BaseSimpleToeicActivity implements IReadingHa
 		viewFlipper.setInAnimation(this, R.anim.in_animation);
 		viewFlipper.setOutAnimation(this, R.anim.out_animation);
 		viewFlipper.showPrevious();
+		viewFlipper.invalidate();
 	}
 
-	private android.content.DialogInterface.OnClickListener onConfirm = new DialogInterface.OnClickListener() {
-
-		@Override
-		public void onClick(DialogInterface dialog, int which) {
-			// TODO: Do some thing
-			goActivity(self, ResultScreen.class);
-		}
-	};
+//	private android.content.DialogInterface.OnClickListener onConfirm = new DialogInterface.OnClickListener() {
+//
+//		@Override
+//		public void onClick(DialogInterface dialog, int which) {
+//			
+//			int countCorrect = 0;
+//			int size = viewFlipper.getChildCount();
+//			for(int i=0; i< size; i++){
+//				boolean confirm = ((QuestionLayoutItem) viewFlipper.getChildAt(i)).isCorrect();
+//				if(confirm) countCorrect++;
+//			}
+//			
+//			showShortToastMessage("Checked: " + countCorrect + " / " + mMaxQuestion);
+//			// TODO: Do some thing
+////			goActivity(self, ResultScreen.class);
+//		}
+//	};
 	
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btnSubmit:
 			
-			if(mCurrentIndexQuestion < mMaxQuestion){
+			if(mCurrentIndexQuestion < mTotalQuestionDialog){
 				nextQuestion();
 				mCurrentIndexQuestion++;
-				if(mCurrentIndexQuestion == mMaxQuestion){
-					btnSubmit.setText("SUBMIT");
+			}
+			else{
+				
+				//Calculate dialog score and saved
+				int countCorrect = 0;
+				int size = viewFlipper.getChildCount();
+				for(int i=0; i< size; i++){
+					QuestionLayoutItem item = (QuestionLayoutItem) viewFlipper.getChildAt(i);
+					boolean confirm = item.isCorrect();
+					listAnswers.add(confirm);
+					if(confirm) countCorrect++;
+					Debugger.d("CONFIRM: " + confirm);
 				}
-			}else{
-				showDialog(R.string.app_name, R.string.message_are_you_sure,
-						R.string.text_ok, R.string.text_cancel, onConfirm, null);
+				
+				int msize = listAnswers.size();
+				showShortToastMessage("Checked: " + countCorrect + " / " + msize);
+				
+				showToastMessage("Next Dialog. No way back");
+				nextDialog();
+				//Go to head layout
+				scrollView.scrollTo(0, 0);
+				
+//				showDialog(R.string.app_name, R.string.message_are_you_sure,
+//						R.string.text_ok, R.string.text_cancel, onConfirm, null);
 			}
 			break;
 		case R.id.btnBack:
