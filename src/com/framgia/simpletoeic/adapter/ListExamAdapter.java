@@ -10,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.framgia.simpletoeic.R;
+import com.framgia.simpletoeic.custom.SmallStarLayout;
 import com.framgia.simpletoeic.database.ExamPart;
 
 public class ListExamAdapter extends BaseAdapter {
@@ -18,9 +19,12 @@ public class ListExamAdapter extends BaseAdapter {
 	
 	private ArrayList<ExamPart> listExam;
 	
-	public ListExamAdapter(Context context, ArrayList<ExamPart> objects) {
+	private boolean isPart = false;
+	
+	public ListExamAdapter(Context context, ArrayList<ExamPart> objects, boolean isPart) {
 		inflater = LayoutInflater.from(context);
 		this.listExam = objects;
+		this.isPart = isPart;
 	}
 	
 	@Override
@@ -35,6 +39,7 @@ public class ListExamAdapter extends BaseAdapter {
 			convertView = inflater.inflate(R.layout.list_exam_item, null);
 			ViewHolder holder = new ViewHolder();
 			holder.tvExamName = (TextView) convertView.findViewById(R.id.tvExamName);
+			holder.starScore = (SmallStarLayout) convertView.findViewById(R.id.starScore);
 			convertView.setTag(holder);
 		}
 		
@@ -43,6 +48,13 @@ public class ListExamAdapter extends BaseAdapter {
 		{
 			ViewHolder holder = (ViewHolder) convertView.getTag();
 			holder.tvExamName.setText(item.getName());
+			if(isPart){
+				holder.starScore.setVisibility(View.VISIBLE);
+				holder.starScore.setStar(item.getStar());
+			}
+			else{
+				holder.starScore.setVisibility(View.GONE);
+			}
 		}
 		
 		return convertView;
@@ -61,6 +73,7 @@ public class ListExamAdapter extends BaseAdapter {
 	
 	private class ViewHolder{
 		private TextView tvExamName;
+		private SmallStarLayout starScore;
 	}
 
 }

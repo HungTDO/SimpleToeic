@@ -11,15 +11,22 @@ import static com.framgia.simpletoeic.database.DBConstants.QUESTION_ANS_CORRECT;
 import static com.framgia.simpletoeic.database.DBConstants.QUESTION_ANS_D;
 import static com.framgia.simpletoeic.database.DBConstants.QUESTION_QUESTION;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
-import android.content.DialogInterface;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
@@ -46,6 +53,9 @@ public class ReadingScreen extends BaseSimpleToeicActivity implements IReadingHa
 	
 	/**Current index of question in total Question. @See : mTotalQuestionDialog*/
 	private int mCurrentIndexQuestion = 1;
+	
+	/**Current part Id*/
+	private int partID = 0;
 
 	private Button btnSubmit, btnBack;
 
@@ -53,7 +63,7 @@ public class ReadingScreen extends BaseSimpleToeicActivity implements IReadingHa
 	
 	private ViewGroup layoutBar, layoutDialog, layoutQuestion;
 
-	private TextView tvDialogContent;
+	private TextView tvDialogContent, tvReadingHeader;
 
 	private ArrayList<Dialog> listDialog;
 
@@ -63,7 +73,7 @@ public class ReadingScreen extends BaseSimpleToeicActivity implements IReadingHa
 	
 	private ArrayList<Boolean> listAnswers;
 	
-	private int partID = 0;
+	private ImageView imgDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +86,9 @@ public class ReadingScreen extends BaseSimpleToeicActivity implements IReadingHa
 		
 		Bundle b = getIntent().getExtras();
 		if (b != null) {
+			String partName = b.getString(Keys.BKEY_PART_NAME, "Reading Test");
 			partID = b.getInt(Keys.BKEY_PARTID);
+			tvReadingHeader.setText(partName);
 			Cursor cursor = dialogDAO.getDialogByPartID(partID);
 			if (cursor != null) {
 
@@ -99,7 +111,8 @@ public class ReadingScreen extends BaseSimpleToeicActivity implements IReadingHa
 
 				}
 				cursor.close();
-				showShortToastMessage("Dialog Count:" + listDialog.size());
+				
+//				showShortToastMessage("Dialog Count:" + listDialog.size());
 				
 				nextDialog();
 			}
@@ -116,6 +129,8 @@ public class ReadingScreen extends BaseSimpleToeicActivity implements IReadingHa
 		layoutQuestion = (ViewGroup) findViewById(R.id.questionContent);
 		tvDialogContent = (TextView) findViewById(R.id.tvDialogContent);
 		viewFlipper = (ViewFlipper) findViewById(R.id.viewFlipper);
+		imgDialog = (ImageView) findViewById(R.id.imgDialog);
+		tvReadingHeader = (TextView) findViewById(R.id.tvReadingHeader);
 		
 		btnBack.setOnClickListener(this);
 		btnSubmit.setOnClickListener(this);
@@ -125,14 +140,42 @@ public class ReadingScreen extends BaseSimpleToeicActivity implements IReadingHa
 
 	}
 
+	/**
+	 * Next dialog, show Dialog and Questions
+	 * @return 
+	 * */
 	private void nextDialog() {
 		
 		if (listDialog != null) {
 			int size = listDialog.size();
 			if (size > mCurentDialog) {
-				int dialogId = listDialog.get(mCurentDialog).getId();
-				String content = listDialog.get(mCurentDialog).getContent();
+				Dialog item = listDialog.get(mCurentDialog);
+				int dialogId = item.getId();
+				String content = item.getContent();
 				tvDialogContent.setText(content);
+				
+				try {
+					String url = item.getImgUrl();
+					if(!TextUtils.isEmpty(url))
+					{
+						InputStream is = getAssets().open(url);
+						Bitmap img = BitmapFactory.decodeStream(is);
+						imgDialog.setImageBitmap(img);
+						imgDialog.setVisibility(View.VISIBLE);
+						Debugger.d("IMAGE > " + url);
+					}
+					else{
+						imgDialog.setVisibility(View.GONE);
+						if(TextUtils.isEmpty(content)) 
+							layoutDialog.setVisibility(View.GONE);
+					}
+					
+				} catch (IOException e) {
+					
+					e.printStackTrace();
+					imgDialog.setVisibility(View.GONE);
+				}
+				
 
 				Cursor mCursorQuestion = questionDAO
 						.getQuestionByDialogId(dialogId);
@@ -162,11 +205,11 @@ public class ReadingScreen extends BaseSimpleToeicActivity implements IReadingHa
 						String mCorrect = mCursorQuestion
 								.getString(correct);
 						// Add item
-						Question item = new Question(mQId, dialogId, mQues, mA,
+						Question mQuestion = new Question(mQId, dialogId, mQues, mA,
 								mB, mC, mD, mCorrect);
-						listQuestion.add(item);
+						listQuestion.add(mQuestion);
 						
-						QuestionLayoutItem mQuestionView = new QuestionLayoutItem(self, item);
+						QuestionLayoutItem mQuestionView = new QuestionLayoutItem(self, mQuestion);
 						viewFlipper.addView(mQuestionView);
 						mMaxQuestion++;
 					}
@@ -195,6 +238,7 @@ public class ReadingScreen extends BaseSimpleToeicActivity implements IReadingHa
 				Debugger.d("RESULT >" + mMaxQuestion + " ;Correct:" + countCorrect) ;
 				// End Part, go to Result screen
 				Bundle bundle = new Bundle();
+				bundle.putString(Keys.BKEY_PART_NAME, tvReadingHeader.getText().toString());
 				bundle.putInt(Keys.BKEY_PARTID, partID);
 				bundle.putInt(Keys.BKEY_TOTAL_QUESTION, mMaxQuestion);
 				bundle.putInt(Keys.BKEY_TRUE_ANSWER, countCorrect);
