@@ -53,6 +53,8 @@ public final class DBConstants implements BaseColumns {
 	public static final String TABLE_SCORE = "SCORE";
 
 	public static final String SCORE_PARTID = "partId";
+	
+	public static final String SCORE_TOTAL_QUESTION = "total_question";
 
 	public static final String SCORE_BESTSCORE = "best_score";
 

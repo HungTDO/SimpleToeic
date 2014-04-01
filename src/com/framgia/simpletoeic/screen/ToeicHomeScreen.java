@@ -20,6 +20,7 @@ import com.framgia.simpletoeic.BaseSimpleToeicActivity;
 import com.framgia.simpletoeic.R;
 import com.framgia.simpletoeic.adapter.ListExamAdapter;
 import com.framgia.simpletoeic.custom.Rotate3dAnimation;
+import com.framgia.simpletoeic.custom.StarLayout.EStar;
 import com.framgia.simpletoeic.database.DBConstants;
 import com.framgia.simpletoeic.database.ExamPart;
 import com.framgia.simpletoeic.fragment.ToeicMenuFragment;
@@ -66,7 +67,7 @@ public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
 				listObject.add(item);
 			}
 			mCursorExamShowAll.close();
-			ListExamAdapter adapter = new ListExamAdapter(self, listObject);
+			ListExamAdapter adapter = new ListExamAdapter(self, listObject, false);
 			lvExam.setAdapter(adapter);
 			Debugger.i("DB -> Exam adapter count: "
 					+ lvExam.getAdapter().getCount());
@@ -173,9 +174,12 @@ public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
 			
 			int partID = ((ExamPart) ((ListExamAdapter) parent.getAdapter())
 					.getItem(position)).getId();
+			String partName = ((ExamPart) ((ListExamAdapter) parent.getAdapter())
+					.getItem(position)).getName();
 			//Go to Dialog
 			Bundle b = new Bundle();
 			b.putInt(Keys.BKEY_PARTID, partID);
+			b.putString(Keys.BKEY_PART_NAME, partName);
 			goActivity(self, ReadingScreen.class, b);
 			
 		}
@@ -192,11 +196,38 @@ public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
 						.getColumnIndex(DBConstants.PART_EXAMID));
 				String name = mCursorPart.getString(mCursorPart
 						.getColumnIndex(DBConstants.PART_NAME));
-				ExamPart item = new ExamPart(id, examID, name);
+
+				Cursor mCursorScore = scoreDAO.getScore(id);
+				EStar start = EStar.EMPTY;
+				if(mCursorScore != null && mCursorScore.getCount() > 0)
+				{
+					mCursorScore.moveToFirst();
+					int bestScore = mCursorScore.getInt(mCursorScore.getColumnIndex(DBConstants.SCORE_BESTSCORE));
+					int total = mCursorScore.getInt(mCursorScore.getColumnIndex(DBConstants.SCORE_TOTAL_QUESTION));
+					mCursorScore.close();
+					
+					if(total != 0)
+					{
+						//Set star
+						int percent = (int)(bestScore * 100) / total;
+						
+						if(percent >= 50 && percent < 70){
+							start = EStar.LOW;
+						}
+						else if(percent >= 70 && percent < 90){
+							start = EStar.MEDIUM;
+						}
+						else if(percent >= 90 && percent <= 100){
+							start = EStar.HIGH;
+						}
+					}
+				}
+				
+				ExamPart item = new ExamPart(id, examID, name, start);
 				list.add(item);
 			}
 			mCursorPart.close();
-			ListExamAdapter adapter = new ListExamAdapter(self, list);
+			ListExamAdapter adapter = new ListExamAdapter(self, list, true);
 			lvPart.setAdapter(adapter);
 
 			applyRotation(position, 0, 90);////Add comment
@@ -334,8 +365,15 @@ public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
 
 	@Override
 	public void onBackPressed() {
-		closeDatabase();
-		super.onBackPressed();
+		if(layoutPart.getVisibility() == View.VISIBLE){
+			applyRotation(-1, 0, -90);
+		}
+		else{
+			closeDatabase();
+			super.onBackPressed();
+		}
+		
+		
 	}
 	
 	@Override

@@ -31,7 +31,7 @@ public class ResultScreen extends BaseSimpleToeicActivity {
 		tvTestName = (TextView) findViewById(R.id.tvTestName);
 		tvScore = (TextView) findViewById(R.id.tvScore);
 		tvBestScore = (TextView) findViewById(R.id.tvBestScore);
-		tvTimeSpent = (TextView) findViewById(R.id.tvTimeSpent);
+//		tvTimeSpent = (TextView) findViewById(R.id.tvTimeSpent);
 //		btnPreview = (Button) findViewById(R.id.btnPreview);
 		btnDone = (Button) findViewById(R.id.btnDone);
 		mStar = (StarLayout) findViewById(R.id.starScore);
@@ -42,6 +42,7 @@ public class ResultScreen extends BaseSimpleToeicActivity {
 		Bundle bundle = getIntent().getExtras();
 		if(bundle != null){
 			//Fill data
+			String name = bundle.getString(Keys.BKEY_PART_NAME, "Reading Test");
 			int partId = bundle.getInt(Keys.BKEY_PARTID, 0);
 			int maxQuestion = bundle.getInt(Keys.BKEY_TOTAL_QUESTION, 0);
 			int correct = bundle.getInt(Keys.BKEY_TRUE_ANSWER, 0);
@@ -53,7 +54,7 @@ public class ResultScreen extends BaseSimpleToeicActivity {
 			if(bestScore < correct){
 				score += " (High Score)";
 				if(!scoreDAO.isPartExist(partId)){
-					scoreDAO.addNewScore(partId, correct);
+					scoreDAO.addNewScore(partId, maxQuestion, correct);
 				}
 				else{
 					scoreDAO.updateScore(partId, correct);
@@ -77,6 +78,7 @@ public class ResultScreen extends BaseSimpleToeicActivity {
 			tvScore.setText(score);
 			tvBestScore.setText(best);
 			mStar.setStar(start);
+			tvTestName.setText(name);
 		}
 			
 		

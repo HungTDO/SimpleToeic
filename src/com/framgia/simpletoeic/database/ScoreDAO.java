@@ -3,6 +3,7 @@ package com.framgia.simpletoeic.database;
 import static android.provider.BaseColumns._ID;
 import static com.framgia.simpletoeic.database.DBConstants.SCORE_BESTSCORE;
 import static com.framgia.simpletoeic.database.DBConstants.SCORE_PARTID;
+import static com.framgia.simpletoeic.database.DBConstants.SCORE_TOTAL_QUESTION;
 import static com.framgia.simpletoeic.database.DBConstants.TABLE_SCORE;
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -63,16 +64,17 @@ public class ScoreDAO {
 		return db.update(TABLE_SCORE, values, whereClause, whereArgs);
 	}
 
-	public int addNewScore(int partID, int newHighScore) {
+	public int addNewScore(int partID, int totalQuestion, int newHighScore) {
 		ContentValues values = new ContentValues();
 		values.put(SCORE_PARTID, partID);
+		values.put(SCORE_TOTAL_QUESTION, totalQuestion);
 		values.put(SCORE_BESTSCORE, newHighScore);
 		return ((int) db.insert(TABLE_SCORE, null, values));
 	}
 
 	public int bestScore(int partId) {
 		int best = 0;
-		String[] columns = { _ID, SCORE_PARTID, SCORE_BESTSCORE };
+		String[] columns = {SCORE_BESTSCORE };
 		String selection = SCORE_PARTID + " = ?";
 		String[] selectionArgs = { String.valueOf(partId) };
 		Cursor c = db.query(TABLE_SCORE, columns, selection, selectionArgs,
@@ -82,5 +84,14 @@ public class ScoreDAO {
 			best = c.getInt(c.getColumnIndex(SCORE_BESTSCORE));
 		}
 		return best;
+	}
+	
+	public Cursor getScore(int partId)
+	{
+		String[] columns = {SCORE_TOTAL_QUESTION, SCORE_BESTSCORE};
+		String selection = SCORE_PARTID + " = ?";
+		String[] selectionArgs = { String.valueOf(partId) };
+		return db.query(TABLE_SCORE, columns, selection, selectionArgs,
+				null, null, null);
 	}
 }
