@@ -51,14 +51,16 @@
             style="@style/style_button_reading"
             android:layout_marginRight="5dp"
             android:layout_marginTop="2dp"
-            android:text="BACK" />
+            android:text="BACK"
+            android:textColor="@color/text_color_selector" />
 
         <Button
             android:id="@+id/btnSubmit"
             style="@style/style_button_reading"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="2dp"
-            android:text="NEXT" />
+            android:text="NEXT"
+            android:textColor="@color/text_color_selector" />
     </LinearLayout>
 
 </LinearLayout>
