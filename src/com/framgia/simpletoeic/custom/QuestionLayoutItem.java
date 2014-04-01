@@ -2,7 +2,6 @@ package com.framgia.simpletoeic.custom;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.Build;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
