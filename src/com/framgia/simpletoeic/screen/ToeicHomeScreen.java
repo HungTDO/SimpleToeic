@@ -42,6 +42,8 @@ public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
 	private ListView lvExam, lvPart;
 
 	private TextView tvPartHeader, tvPartName;
+	
+	private int examId = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -152,17 +154,21 @@ public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
 		}
 	}
 
+	private void refreshPart(int position, int examID, boolean animated) {
+		// Get all part by exam id
+		Cursor mCursorPart = partDAO.getAllPart(examID);
+		showPart(position, mCursorPart, animated);
+	}
+	
 	private OnItemClickListener onExamclick = new OnItemClickListener() {
 
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
 			
-			int examID = ((ExamPart) ((ListExamAdapter) parent.getAdapter())
+			examId = ((ExamPart) ((ListExamAdapter) parent.getAdapter())
 					.getItem(position)).getExamId();
-			// Get all part by exam id
-			Cursor mCursorPart = partDAO.getAllPart(examID);
-			showPart(position, mCursorPart);
+			refreshPart(position, examId, true);
 		}
 	};
 	
@@ -185,7 +191,7 @@ public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
 		}
 	};
 
-	private void showPart(int position, Cursor mCursorPart) {
+	private void showPart(int position, Cursor mCursorPart, boolean animated) {
 		if (mCursorPart != null) {
 			Debugger.i("DB -> Part cursor count: " + mCursorPart.getCount());
 			ArrayList<ExamPart> list = new ArrayList<ExamPart>();
@@ -229,8 +235,9 @@ public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
 			mCursorPart.close();
 			ListExamAdapter adapter = new ListExamAdapter(self, list, true);
 			lvPart.setAdapter(adapter);
-
-			applyRotation(position, 0, 90);////Add comment
+			if(animated){
+				applyRotation(position, 0, 90);////Add comment
+			}
 		}
 	}
 
@@ -374,6 +381,14 @@ public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
 		}
 		
 		
+	}
+	
+	@Override
+	protected void onResume() {
+		if(layoutPart.getVisibility() == View.VISIBLE){
+			refreshPart(0, examId, false);
+		}
+		super.onResume();
 	}
 	
 	@Override
