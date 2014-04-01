@@ -11,8 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:clipToPadding="true"
         android:inAnimation="@anim/out_animation"
-        android:outAnimation="@anim/in_animation" 
-        android:clipToPadding="true"/>
+        android:outAnimation="@anim/in_animation" />
 
 </RelativeLayout>

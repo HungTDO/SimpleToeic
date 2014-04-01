@@ -14,7 +14,9 @@ import static com.framgia.simpletoeic.database.DBConstants.QUESTION_QUESTION;
 import java.util.ArrayList;
 
 import android.content.DialogInterface;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,6 +28,7 @@ import android.widget.ViewFlipper;
 
 import com.framgia.simpletoeic.BaseSimpleToeicActivity;
 import com.framgia.simpletoeic.R;
+import com.framgia.simpletoeic.R.color;
 import com.framgia.simpletoeic.custom.QuestionLayoutItem;
 import com.framgia.simpletoeic.database.Dialog;
 import com.framgia.simpletoeic.database.Question;
@@ -245,7 +248,7 @@ public class ReadingScreen extends BaseSimpleToeicActivity implements IReadingHa
 			
 			if(mCurrentIndexQuestion < mTotalQuestionDialog){
 				nextQuestion();
-				mCurrentIndexQuestion++;
+				mCurrentIndexQuestion++;				
 			}
 			else{
 				
