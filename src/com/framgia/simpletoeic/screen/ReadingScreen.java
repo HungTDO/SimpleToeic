@@ -15,17 +15,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-import android.content.DialogInterface;
-import android.content.res.ColorStateList;
-import android.database.Cursor;
-import android.graphics.Color;
+import uk.co.senab.photoview.PhotoViewAttacher;
+import uk.co.senab.photoview.PhotoViewAttacher.OnViewTapListener;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -37,7 +34,6 @@ import android.widget.ViewFlipper;
 
 import com.framgia.simpletoeic.BaseSimpleToeicActivity;
 import com.framgia.simpletoeic.R;
-import com.framgia.simpletoeic.R.color;
 import com.framgia.simpletoeic.custom.QuestionLayoutItem;
 import com.framgia.simpletoeic.database.Dialog;
 import com.framgia.simpletoeic.database.Question;
@@ -66,7 +62,7 @@ public class ReadingScreen extends BaseSimpleToeicActivity implements IReadingHa
 
 	private ScrollView scrollView;
 	
-	private ViewGroup layoutBar, layoutDialog, layoutQuestion;
+	private ViewGroup layoutDialog, layoutBar, layoutQuestion;
 
 	private TextView tvDialogContent, tvReadingHeader;
 
@@ -80,6 +76,8 @@ public class ReadingScreen extends BaseSimpleToeicActivity implements IReadingHa
 	
 	private ImageView imgDialog;
 
+	private PhotoViewAttacher mAttacher;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -116,8 +114,7 @@ public class ReadingScreen extends BaseSimpleToeicActivity implements IReadingHa
 
 				}
 				cursor.close();
-				
-//				showShortToastMessage("Dialog Count:" + listDialog.size());
+				//showShortToastMessage("Dialog Count:" + listDialog.size());
 				
 				nextDialog();
 			}
@@ -141,9 +138,46 @@ public class ReadingScreen extends BaseSimpleToeicActivity implements IReadingHa
 		btnSubmit.setOnClickListener(this);
 		btnSubmit.setText("NEXT");
 		
+		scrollView.setOnTouchListener(new View.OnTouchListener() {
+
+	        @Override
+	        public boolean onTouch(View v, MotionEvent event) {
+	        	scrollView.getParent().requestDisallowInterceptTouchEvent(true);
+	            return false;
+	        }
+	    });
 		
+		mAttacher = new PhotoViewAttacher(imgDialog);
+		mAttacher.setMaximumScale(3.0f);
+		mAttacher.setOnViewTapListener(tapListener);
 
 	}
+	
+	/**
+	 * Single Tap image event
+	 * */
+	OnViewTapListener tapListener = new OnViewTapListener() {
+		
+		@Override
+		public void onViewTap(View view, float x, float y) {
+			//Un-zoom
+			unZoom(x,y);
+		}
+	};
+	
+	/**
+	 * Un-zoom for PhotoView
+	 * @param x
+	 * @param y
+	 * */
+	private void unZoom(float x, float y)
+	{
+		float mMinScale = PhotoViewAttacher.DEFAULT_MIN_SCALE;
+		if(mAttacher.getScale() != mMinScale){
+			mAttacher.setScale(mMinScale, x, y, true);
+		}
+	}
+	
 
 	/**
 	 * Next dialog, show Dialog and Questions
@@ -269,24 +303,6 @@ public class ReadingScreen extends BaseSimpleToeicActivity implements IReadingHa
 		viewFlipper.invalidate();
 	}
 
-//	private android.content.DialogInterface.OnClickListener onConfirm = new DialogInterface.OnClickListener() {
-//
-//		@Override
-//		public void onClick(DialogInterface dialog, int which) {
-//			
-//			int countCorrect = 0;
-//			int size = viewFlipper.getChildCount();
-//			for(int i=0; i< size; i++){
-//				boolean confirm = ((QuestionLayoutItem) viewFlipper.getChildAt(i)).isCorrect();
-//				if(confirm) countCorrect++;
-//			}
-//			
-//			showShortToastMessage("Checked: " + countCorrect + " / " + mMaxQuestion);
-//			// TODO: Do some thing
-////			goActivity(self, ResultScreen.class);
-//		}
-//	};
-	
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -299,21 +315,17 @@ public class ReadingScreen extends BaseSimpleToeicActivity implements IReadingHa
 			else{
 				
 				//Calculate dialog score and saved
-				int countCorrect = 0;
 				int size = viewFlipper.getChildCount();
 				for(int i=0; i< size; i++){
 					QuestionLayoutItem item = (QuestionLayoutItem) viewFlipper.getChildAt(i);
 					boolean confirm = item.isCorrect();
 					listAnswers.add(confirm);
-					if(confirm) countCorrect++;
 					Debugger.d("CONFIRM: " + confirm);
 				}
 				
-				int msize = listAnswers.size();
-				showShortToastMessage("Checked: " + countCorrect + " / " + msize);
-				
 				showToastMessage("Next Dialog. No way back");
 				nextDialog();
+				
 				//Go to head layout
 				scrollView.scrollTo(0, 0);
 				
