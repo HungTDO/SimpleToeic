@@ -1,9 +1,9 @@
 package com.framgia.simpletoeic.screen;
 
 import static android.provider.BaseColumns._ID;
+import static com.framgia.simpletoeic.database.DBConstants.DIALOG_AUDIOURL;
 import static com.framgia.simpletoeic.database.DBConstants.DIALOG_CONTENT;
 import static com.framgia.simpletoeic.database.DBConstants.DIALOG_IMAGEURL;
-import static com.framgia.simpletoeic.database.DBConstants.DIALOG_AUDIOURL;
 import static com.framgia.simpletoeic.database.DBConstants.DIALOG_PARTID;
 import static com.framgia.simpletoeic.database.DBConstants.QUESTION_ANS_A;
 import static com.framgia.simpletoeic.database.DBConstants.QUESTION_ANS_B;
@@ -23,7 +23,9 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnInfoListener;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
@@ -65,6 +67,8 @@ public class ListeningScreen extends BaseSimpleToeicActivity implements IReading
 	
 	/**Media player is pause?*/
 	private boolean isPause = false;
+	
+	private int audioDuration = 0;
 
 	private Button btnSubmit, btnBack;
 
@@ -76,7 +80,7 @@ public class ListeningScreen extends BaseSimpleToeicActivity implements IReading
 	
 	private ProgressBar prgAudio;
 
-	private TextView tvDialogContent, tvReadingHeader;
+	private TextView tvDialogContent, tvReadingHeader, tvAudioTime;
 
 	private ArrayList<Dialog> listDialog;
 
@@ -91,6 +95,10 @@ public class ListeningScreen extends BaseSimpleToeicActivity implements IReading
 	private PhotoViewAttacher mAttacher;
 	
 	private MediaPlayer mp;
+	
+	private Handler mMediaHandler = null;
+	
+	private Runnable trackMediaInfo = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -152,6 +160,7 @@ public class ListeningScreen extends BaseSimpleToeicActivity implements IReading
 		viewFlipper = (ViewFlipper) findViewById(R.id.viewFlipper);
 		imgDialog = (ImageView) findViewById(R.id.imgDialog);
 		tvReadingHeader = (TextView) findViewById(R.id.tvReadingHeader);
+		tvAudioTime = (TextView) findViewById(R.id.tvAudioTime);
 		
 		btnBack.setOnClickListener(this);
 		btnSubmit.setOnClickListener(this);
@@ -215,6 +224,43 @@ public class ListeningScreen extends BaseSimpleToeicActivity implements IReading
 	}
 	
 	/**
+	 * Track duration of Media player
+	 * */
+	private void currentMediaDuration()
+	{
+		trackMediaInfo = new Runnable() {
+			
+			@Override
+			public void run() {
+				if(mp != null && mp.isPlaying())
+				{
+					int duration = (mp.getCurrentPosition()/1000);
+					String currentDuration = duration + "/" +  audioDuration;
+					//Set media info
+					prgAudio.setProgress(duration);
+					tvAudioTime.setText(currentDuration);
+					//Recursively track media info
+					currentMediaDuration();
+					
+					Debugger.i("AUDIO_PLAYING > " + currentDuration);
+				}
+				else {
+					if(mMediaHandler != null)
+					{
+						mMediaHandler.removeCallbacks(trackMediaInfo);
+						mMediaHandler = null;
+					}
+				}
+				
+			}
+		};
+
+		mMediaHandler = new Handler();
+		mMediaHandler.postDelayed(trackMediaInfo, 1000);//1s
+		
+	}
+	
+	/**
 	 * Next dialog, show Dialog and Questions
 	 * @return 
 	 * */
@@ -224,7 +270,7 @@ public class ListeningScreen extends BaseSimpleToeicActivity implements IReading
 			int size = listDialog.size();
 			if (size > mCurentDialog) {
 				Dialog item = listDialog.get(mCurentDialog);
-				//TODO: Load audio
+				//Load audio
 				removeAudio();
 				
 				try
@@ -236,11 +282,17 @@ public class ListeningScreen extends BaseSimpleToeicActivity implements IReading
 					mp = new MediaPlayer();
 					mp.setDataSource(descriptor.getFileDescriptor(), start, end);
 					mp.prepare();
-	
+					//Start audio
 					mp.setVolume(1.0f, 1.0f);
 					mp.start();
-				
+					
+					//Set audio info
+					audioDuration = mp.getDuration() / 1000;
+					prgAudio.setMax(audioDuration);
+					currentMediaDuration();
+					
 					Debugger.d("AUDIO_STARTED > " + item.getAudioUrl());
+					
 				}catch(IOException ex){
 					ex.printStackTrace();
 					showShortToastMessage("Audio load failed");
