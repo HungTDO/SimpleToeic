@@ -42,6 +42,9 @@ public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
 	
 	private EMenu currentMenu = EMenu.READING;
 	
+	/**Current Exam Type*/
+	private int currentType = 0;//Default Reading
+	
 	private SlidingMenu menu;
 
 	private ViewGroup mContainer;
@@ -106,6 +109,7 @@ public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
 
 	private void loadExam(int type)
 	{
+		this.currentType = type;
 		Cursor mCursorExamShowAll = examDAO.getAllExam(type);
 		if (mCursorExamShowAll != null) {
 			int count = mCursorExamShowAll.getCount();
@@ -154,16 +158,13 @@ public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
 	public void onFragToActivity(EMenu menu) {
 	
 		closeMenu();
-		
-		
-		
 		// set Exam name
 		String part = menu.toString();
-		tvPartHeader.setText(part);
-		// showShortToastMessage("Click: " + part);
-
+		
 		switch (menu) {
 		case READING:
+			tvPartHeader.setText(part);
+			
 			//Hide part & visible Exam
 			if(layoutPart.getVisibility() == View.VISIBLE){
 				delayAnimation();
@@ -175,6 +176,7 @@ public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
 			}
 			break;
 		case LISTENING:
+			tvPartHeader.setText(part);
 			if(layoutPart.getVisibility() == View.VISIBLE){
 				delayAnimation();
 				
@@ -234,7 +236,13 @@ public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
 			Bundle b = new Bundle();
 			b.putInt(Keys.BKEY_PARTID, partID);
 			b.putString(Keys.BKEY_PART_NAME, partName);
-			goActivity(self, ReadingScreen.class, b);
+			b.putInt(Keys.BKEY_EXAM_TYPE, currentType);
+			if(currentType == TYPE_READING){
+				goActivity(self, ReadingScreen.class, b);
+			}
+			else if(currentType == TYPE_LISTENING){
+				goActivity(self, ListeningScreen.class, b);
+			}
 			
 		}
 	};

@@ -33,6 +33,8 @@ public final class DBConstants implements BaseColumns {
 	public static final String DIALOG_CONTENT = "content";
 
 	public static final String DIALOG_IMAGEURL = "imageUrl";
+	
+	public static final String DIALOG_AUDIOURL = "audioUrl";
 
 	// QUESTION TABLE CONSTANT
 	public static final String TABLE_QUESTION = "QUESTION";

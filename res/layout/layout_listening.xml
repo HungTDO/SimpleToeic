@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_white"
+    android:orientation="vertical"
+    android:padding="10dp" >
+
+    <include
+        android:id="@+id/readingBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/layout_reading_bar" />
+    
+    <include
+        android:id="@+id/media_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="3dp"
+        layout="@layout/layout_media_player" />
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <include
+                android:id="@+id/dialogContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                layout="@layout/layout_dialog_content" />
+
+            <include
+                android:id="@+id/questionContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                layout="@layout/layout_dialog_question" />
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/btnBack"
+            style="@style/style_button_reading"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="2dp"
+            android:text="BACK"
+            android:textColor="@color/text_color_selector" />
+
+        <Button
+            android:id="@+id/btnSubmit"
+            style="@style/style_button_reading"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="2dp"
+            android:text="NEXT"
+            android:textColor="@color/text_color_selector" />
+    </LinearLayout>
+
+</LinearLayout>
