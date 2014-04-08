@@ -15,6 +15,8 @@ public final class DBConstants implements BaseColumns {
 	public static final String EXAM_EXAMID = "examId";
 
 	public static final String EXAM_NAME = "name";
+	
+	public static final String EXAM_TYPE = "type";
 
 	// PART TABLE CONSTANTS
 	public static final String TABLE_PART = "PART";
