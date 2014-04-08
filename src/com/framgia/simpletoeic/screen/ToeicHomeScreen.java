@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -32,7 +33,15 @@ import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
 public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
 		IMenuProcessing, OnClickListener {
-
+	
+	/**Type for reading*/
+	private static final int TYPE_READING = 0;
+	
+	/**Type for Listening*/
+	private static final int TYPE_LISTENING = 1;
+	
+	private EMenu currentMenu = EMenu.READING;
+	
 	private SlidingMenu menu;
 
 	private ViewGroup mContainer;
@@ -44,6 +53,7 @@ public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
 	private TextView tvPartHeader, tvPartName;
 	
 	private int examId = 0;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,29 +62,8 @@ public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
 		Debugger.i("Home Screen Started");
 
 		init();
-		Cursor mCursorExamShowAll = examDAO.getAllExam();
-		if (mCursorExamShowAll != null) {
-			int count = mCursorExamShowAll.getCount();
-			Debugger.i("DB -> Exam table count: " + count);
-			ArrayList<ExamPart> listObject = new ArrayList<ExamPart>();
-
-			while (mCursorExamShowAll.moveToNext()) {
-				int id = mCursorExamShowAll.getInt(mCursorExamShowAll
-						.getColumnIndex(DBConstants._ID));
-				int examID = mCursorExamShowAll.getInt(mCursorExamShowAll
-						.getColumnIndex(DBConstants.EXAM_EXAMID));
-				String name = mCursorExamShowAll.getString(mCursorExamShowAll
-						.getColumnIndex(DBConstants.EXAM_NAME));
-				ExamPart item = new ExamPart(id, examID, name);
-				listObject.add(item);
-			}
-			mCursorExamShowAll.close();
-			ListExamAdapter adapter = new ListExamAdapter(self, listObject, false);
-			lvExam.setAdapter(adapter);
-			Debugger.i("DB -> Exam adapter count: "
-					+ lvExam.getAdapter().getCount());
-		}
-
+		
+		loadExam(TYPE_READING);
 	}
 
 	private void init() {
@@ -115,18 +104,59 @@ public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
 		tvPartHeader.setText(strRead);
 	}
 
+	private void loadExam(int type)
+	{
+		Cursor mCursorExamShowAll = examDAO.getAllExam(type);
+		if (mCursorExamShowAll != null) {
+			int count = mCursorExamShowAll.getCount();
+			Debugger.i("DB -> Exam table count: " + count);
+			ArrayList<ExamPart> listObject = new ArrayList<ExamPart>();
+
+			while (mCursorExamShowAll.moveToNext()) {
+				int id = mCursorExamShowAll.getInt(mCursorExamShowAll
+						.getColumnIndex(DBConstants._ID));
+				int examID = mCursorExamShowAll.getInt(mCursorExamShowAll
+						.getColumnIndex(DBConstants.EXAM_EXAMID));
+				String name = mCursorExamShowAll.getString(mCursorExamShowAll
+						.getColumnIndex(DBConstants.EXAM_NAME));
+				ExamPart item = new ExamPart(id, examID, name);
+				listObject.add(item);
+			}
+			mCursorExamShowAll.close();
+			ListExamAdapter adapter = new ListExamAdapter(self, listObject, false);
+			lvExam.setAdapter(adapter);
+			Debugger.i("DB -> Exam adapter count: "
+					+ lvExam.getAdapter().getCount());
+		}
+	}
+	
+	
 	/** Close sliding menu */
 	private void closeMenu() {
 		if (menu != null && menu.isShown()) {
 			menu.toggle();
 		}
 	}
+	
+	private void delayAnimation()
+	{
+		new Handler().postDelayed(new Runnable() {
+			
+			@Override
+			public void run() {
+				
+				applyRotation(-1, 0, -90);
+			}
+		}, 300);
+	}
 
 	@Override
 	public void onFragToActivity(EMenu menu) {
-
+	
 		closeMenu();
-
+		
+		
+		
 		// set Exam name
 		String part = menu.toString();
 		tvPartHeader.setText(part);
@@ -134,10 +164,26 @@ public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
 
 		switch (menu) {
 		case READING:
-
+			//Hide part & visible Exam
+			if(layoutPart.getVisibility() == View.VISIBLE){
+				delayAnimation();
+			}
+			
+			if(currentMenu != menu)
+			{
+				loadExam(TYPE_READING);
+			}
 			break;
 		case LISTENING:
-
+			if(layoutPart.getVisibility() == View.VISIBLE){
+				delayAnimation();
+				
+			}
+			
+			if(currentMenu != menu)
+			{
+				loadExam(TYPE_LISTENING);
+			}
 			break;
 		case TIP:
 			goActivity(self, TipScreen.class);
@@ -152,6 +198,8 @@ public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
 		default:
 			break;
 		}
+		//Save current menu
+		currentMenu = menu;
 	}
 
 	private void refreshPart(int position, int examID, boolean animated) {
