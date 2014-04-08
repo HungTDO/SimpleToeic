@@ -1,6 +1,7 @@
 package com.framgia.simpletoeic.database;
 
 public class Dialog {
+	
 	private int id = 0;
 
 	private int partId = 0;
@@ -8,12 +9,15 @@ public class Dialog {
 	private String content;
 
 	private String imgUrl;
+	
+	private String audioUrl;
 
-	public Dialog(int id, int partId, String content, String imgUrl) {
+	public Dialog(int id, int partId, String content, String imgUrl, String audioUrl) {
 		this.id = id;
 		this.partId = partId;
 		this.content = content;
 		this.imgUrl = imgUrl;
+		this.audioUrl = audioUrl;
 	}
 
 	public int getId() {
@@ -32,4 +36,8 @@ public class Dialog {
 		return imgUrl;
 	}
 
+	public String getAudioUrl() {
+		return audioUrl;
+	}
+	
 }

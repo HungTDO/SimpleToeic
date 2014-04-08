@@ -2,6 +2,7 @@ package com.framgia.simpletoeic.custom;
 
 import android.app.Activity;
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -71,7 +72,13 @@ public class QuestionLayoutItem extends LinearLayout {
 			rdoA.setText(mAnswerA);
 			rdoB.setText(mAnswerB);
 			rdoC.setText(mAnswerC);
-			rdoD.setText(mAnswerD);
+			if(!TextUtils.isEmpty(mAnswerD)){
+				rdoD.setText(mAnswerD);
+				rdoD.setVisibility(View.VISIBLE);
+			}
+			else {
+				rdoD.setVisibility(View.GONE);
+			}
 		}
 	}
 

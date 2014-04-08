@@ -15,4 +15,6 @@ public final class Keys {
 	public static final String BKEY_TOTAL_QUESTION = "TOTAL_QUESTION";
 	
 	public static final String BKEY_TRUE_ANSWER = "TRUE_ANSWER";
+	
+	public static final String BKEY_EXAM_TYPE = "type";
 }

@@ -1,9 +1,9 @@
 package com.framgia.simpletoeic.screen;
 
 import static android.provider.BaseColumns._ID;
-import static com.framgia.simpletoeic.database.DBConstants.DIALOG_AUDIOURL;
 import static com.framgia.simpletoeic.database.DBConstants.DIALOG_CONTENT;
 import static com.framgia.simpletoeic.database.DBConstants.DIALOG_IMAGEURL;
+import static com.framgia.simpletoeic.database.DBConstants.DIALOG_AUDIOURL;
 import static com.framgia.simpletoeic.database.DBConstants.DIALOG_PARTID;
 import static com.framgia.simpletoeic.database.DBConstants.QUESTION_ANS_A;
 import static com.framgia.simpletoeic.database.DBConstants.QUESTION_ANS_B;
@@ -18,9 +18,11 @@ import java.util.ArrayList;
 
 import uk.co.senab.photoview.PhotoViewAttacher;
 import uk.co.senab.photoview.PhotoViewAttacher.OnViewTapListener;
+import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.MotionEvent;
@@ -28,7 +30,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
@@ -42,7 +46,7 @@ import com.framgia.simpletoeic.ie.IReadingHandle;
 import com.framgia.simpletoeic.ie.Keys;
 import com.framgia.simpletoeic.screen.util.Debugger;
 
-public class ReadingScreen extends BaseSimpleToeicActivity implements IReadingHandle, OnClickListener{
+public class ListeningScreen extends BaseSimpleToeicActivity implements IReadingHandle, OnClickListener{
 
 	/**count questions in a Dialog*/
 	private int mTotalQuestionDialog = 0;
@@ -58,12 +62,19 @@ public class ReadingScreen extends BaseSimpleToeicActivity implements IReadingHa
 	
 	/**Current part Id*/
 	private int partID = 0;
+	
+	/**Media player is pause?*/
+	private boolean isPause = false;
 
 	private Button btnSubmit, btnBack;
 
 	private ScrollView scrollView;
 	
 	private ViewGroup layoutDialog, layoutBar, layoutQuestion;
+	
+	private ImageButton btnPlay;
+	
+	private ProgressBar prgAudio;
 
 	private TextView tvDialogContent, tvReadingHeader;
 
@@ -79,10 +90,12 @@ public class ReadingScreen extends BaseSimpleToeicActivity implements IReadingHa
 
 	private PhotoViewAttacher mAttacher;
 	
+	private MediaPlayer mp;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.layout_reading);
+		setContentView(R.layout.layout_listening);
 
 		init();
 		//Save true answer
@@ -127,6 +140,8 @@ public class ReadingScreen extends BaseSimpleToeicActivity implements IReadingHa
 
 	private void init() {
 		
+		btnPlay = (ImageButton) findViewById(R.id.btnPlay);
+		prgAudio = (ProgressBar) findViewById(R.id.prgAudio);
 		btnSubmit = (Button) findViewById(R.id.btnSubmit);
 		btnBack = (Button) findViewById(R.id.btnBack);
 		scrollView = (ScrollView) findViewById(R.id.scrollView);
@@ -154,7 +169,8 @@ public class ReadingScreen extends BaseSimpleToeicActivity implements IReadingHa
 		mAttacher = new PhotoViewAttacher(imgDialog);
 		mAttacher.setMaximumScale(3.0f);
 		mAttacher.setOnViewTapListener(tapListener);
-
+		
+		mp = new MediaPlayer();
 	}
 	
 	/**
@@ -183,6 +199,21 @@ public class ReadingScreen extends BaseSimpleToeicActivity implements IReadingHa
 	}
 	
 
+	private void removeAudio()
+	{
+		if(mp != null)
+		{
+			if(mp.isPlaying())
+			{
+				mp.stop();
+				mp.release();
+				mp = null;
+				Debugger.i("AUDIO_RELEASED");
+			}
+			
+		}
+	}
+	
 	/**
 	 * Next dialog, show Dialog and Questions
 	 * @return 
@@ -193,6 +224,28 @@ public class ReadingScreen extends BaseSimpleToeicActivity implements IReadingHa
 			int size = listDialog.size();
 			if (size > mCurentDialog) {
 				Dialog item = listDialog.get(mCurentDialog);
+				//TODO: Load audio
+				removeAudio();
+				
+				try
+				{
+					AssetFileDescriptor descriptor = getAssets().openFd(item.getAudioUrl());
+					long start = descriptor.getStartOffset();
+					long end = descriptor.getLength();
+					
+					mp = new MediaPlayer();
+					mp.setDataSource(descriptor.getFileDescriptor(), start, end);
+					mp.prepare();
+	
+					mp.setVolume(1.0f, 1.0f);
+					mp.start();
+				
+					Debugger.d("AUDIO_STARTED > " + item.getAudioUrl());
+				}catch(IOException ex){
+					ex.printStackTrace();
+					showShortToastMessage("Audio load failed");
+				}
+				
 				int dialogId = item.getId();
 				String content = item.getContent();
 				tvDialogContent.setText(content);
@@ -352,7 +405,40 @@ public class ReadingScreen extends BaseSimpleToeicActivity implements IReadingHa
 	@Override
 	public void onQuestionChecked(int index, boolean isCorrect) {
 		
-		
 	}
-
+	
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if(mp != null && isPause)
+		{
+			mp.start();
+			Debugger.i("AUDIO_RESTART");
+		}
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		if(mp != null & mp.isPlaying())
+		{
+			mp.pause();
+			isPause = true;
+			Debugger.i("AUDIO_PAUSE");
+		}
+	}
+	
+	
+	@Override
+	protected void onStop() {
+		super.onStop();
+		removeAudio();
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		removeAudio();
+	}
 }
