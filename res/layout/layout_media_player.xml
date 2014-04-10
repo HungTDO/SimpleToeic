@@ -11,7 +11,7 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="3dp"
         android:background="@color/color_menu_bkg"
-        android:src="@drawable/ic_media_play" />
+        android:src="@drawable/selector_play" />
 
     <ProgressBar
         android:id="@+id/prgAudio"
