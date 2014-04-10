@@ -162,6 +162,7 @@ public class ListeningScreen extends BaseSimpleToeicActivity implements IReading
 		tvReadingHeader = (TextView) findViewById(R.id.tvReadingHeader);
 		tvAudioTime = (TextView) findViewById(R.id.tvAudioTime);
 		
+		btnPlay.setOnClickListener(this);
 		btnBack.setOnClickListener(this);
 		btnSubmit.setOnClickListener(this);
 		btnSubmit.setText("NEXT");
@@ -247,6 +248,11 @@ public class ListeningScreen extends BaseSimpleToeicActivity implements IReading
 				else {
 					if(mMediaHandler != null)
 					{
+						//Set default status
+						String currentDuration = "0/" +  audioDuration;
+						prgAudio.setProgress(0);
+						tvAudioTime.setText(currentDuration);
+						//Remove handler
 						mMediaHandler.removeCallbacks(trackMediaInfo);
 						mMediaHandler = null;
 					}
@@ -270,11 +276,12 @@ public class ListeningScreen extends BaseSimpleToeicActivity implements IReading
 			int size = listDialog.size();
 			if (size > mCurentDialog) {
 				Dialog item = listDialog.get(mCurentDialog);
-				//Load audio
+				//Remove current audio and new player
 				removeAudio();
 				
 				try
 				{
+					//Load audio
 					AssetFileDescriptor descriptor = getAssets().openFd(item.getAudioUrl());
 					long start = descriptor.getStartOffset();
 					long end = descriptor.getLength();
@@ -415,6 +422,13 @@ public class ListeningScreen extends BaseSimpleToeicActivity implements IReading
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
+		case R.id.btnPlay:
+			if (mp != null && !mp.isPlaying()) {
+				//ReStart and track media player
+				mp.start();
+				currentMediaDuration();
+			}
+			break;
 		case R.id.btnSubmit:
 			
 			if(mCurrentIndexQuestion < mTotalQuestionDialog){
