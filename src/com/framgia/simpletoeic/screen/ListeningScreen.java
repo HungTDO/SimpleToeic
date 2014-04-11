@@ -23,7 +23,6 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnInfoListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -74,7 +73,7 @@ public class ListeningScreen extends BaseSimpleToeicActivity implements IReading
 
 	private ScrollView scrollView;
 	
-	private ViewGroup layoutDialog, layoutBar, layoutQuestion;
+	private ViewGroup layoutDialog;
 	
 	private ImageButton btnPlay;
 	
@@ -90,7 +89,7 @@ public class ListeningScreen extends BaseSimpleToeicActivity implements IReading
 	
 	private ArrayList<Boolean> listAnswers;
 	
-	private ImageView imgDialog;
+	private ImageView imgDialog, btnHelp;
 
 	private PhotoViewAttacher mAttacher;
 	
@@ -139,29 +138,30 @@ public class ListeningScreen extends BaseSimpleToeicActivity implements IReading
 
 				}
 				cursor.close();
-				//showShortToastMessage("Dialog Count:" + listDialog.size());
-				
+				//Load Dialog
 				nextDialog();
+				//Show Hint confirm dialog
+				//showHintDialog();
 			}
 		}
 	}
 
 	private void init() {
 		
+		btnHelp = (ImageView) findViewById(R.id.btnHelp);
 		btnPlay = (ImageButton) findViewById(R.id.btnPlay);
 		prgAudio = (ProgressBar) findViewById(R.id.prgAudio);
 		btnSubmit = (Button) findViewById(R.id.btnSubmit);
 		btnBack = (Button) findViewById(R.id.btnBack);
 		scrollView = (ScrollView) findViewById(R.id.scrollView);
-		layoutBar = (ViewGroup) findViewById(R.id.readingBar);
 		layoutDialog = (ViewGroup) findViewById(R.id.dialogContent);
-		layoutQuestion = (ViewGroup) findViewById(R.id.questionContent);
 		tvDialogContent = (TextView) findViewById(R.id.tvDialogContent);
 		viewFlipper = (ViewFlipper) findViewById(R.id.viewFlipper);
 		imgDialog = (ImageView) findViewById(R.id.imgDialog);
 		tvReadingHeader = (TextView) findViewById(R.id.tvReadingHeader);
 		tvAudioTime = (TextView) findViewById(R.id.tvAudioTime);
 		
+		btnHelp.setOnClickListener(this);
 		btnPlay.setOnClickListener(this);
 		btnBack.setOnClickListener(this);
 		btnSubmit.setOnClickListener(this);
@@ -422,43 +422,47 @@ public class ListeningScreen extends BaseSimpleToeicActivity implements IReading
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
+
+		case R.id.btnHelp:
+			showHintDialogOnBar();
+			break;
 		case R.id.btnPlay:
 			if (mp != null && !mp.isPlaying()) {
-				//ReStart and track media player
+				// ReStart and track media player
 				mp.start();
 				currentMediaDuration();
 			}
 			break;
 		case R.id.btnSubmit:
-			
-			if(mCurrentIndexQuestion < mTotalQuestionDialog){
+
+			if (mCurrentIndexQuestion < mTotalQuestionDialog) {
 				nextQuestion();
-				mCurrentIndexQuestion++;				
-			}
-			else{
-				
-				//Calculate dialog score and saved
+				mCurrentIndexQuestion++;
+			} else {
+
+				// Calculate dialog score and saved
 				int size = viewFlipper.getChildCount();
-				for(int i=0; i< size; i++){
-					QuestionLayoutItem item = (QuestionLayoutItem) viewFlipper.getChildAt(i);
+				for (int i = 0; i < size; i++) {
+					QuestionLayoutItem item = (QuestionLayoutItem) viewFlipper
+							.getChildAt(i);
 					boolean confirm = item.isCorrect();
 					listAnswers.add(confirm);
 					Debugger.d("CONFIRM: " + confirm);
 				}
-				
+
 				showToastMessage("Next Dialog. No way back");
 				nextDialog();
-				
-				//Go to head layout
+
+				// Go to head layout
 				scrollView.scrollTo(0, 0);
-				
-//				showDialog(R.string.app_name, R.string.message_are_you_sure,
-//						R.string.text_ok, R.string.text_cancel, onConfirm, null);
+
+				// showDialog(R.string.app_name, R.string.message_are_you_sure,
+				// R.string.text_ok, R.string.text_cancel, onConfirm, null);
 			}
 			break;
 		case R.id.btnBack:
 			btnSubmit.setText("NEXT");
-			if(mCurrentIndexQuestion > 1){
+			if (mCurrentIndexQuestion > 1) {
 				previousQuestion();
 				mCurrentIndexQuestion--;
 			}

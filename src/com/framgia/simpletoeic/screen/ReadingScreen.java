@@ -63,7 +63,7 @@ public class ReadingScreen extends BaseSimpleToeicActivity implements IReadingHa
 
 	private ScrollView scrollView;
 	
-	private ViewGroup layoutDialog, layoutBar, layoutQuestion;
+	private ViewGroup layoutDialog;
 
 	private TextView tvDialogContent, tvReadingHeader;
 
@@ -75,7 +75,7 @@ public class ReadingScreen extends BaseSimpleToeicActivity implements IReadingHa
 	
 	private ArrayList<Boolean> listAnswers;
 	
-	private ImageView imgDialog;
+	private ImageView imgDialog, btnHelp;
 
 	private PhotoViewAttacher mAttacher;
 	
@@ -118,21 +118,22 @@ public class ReadingScreen extends BaseSimpleToeicActivity implements IReadingHa
 
 				}
 				cursor.close();
-				//showShortToastMessage("Dialog Count:" + listDialog.size());
 				
+				//Load Dialog
 				nextDialog();
+				//Show Hint confirm dialog
+				showHintDialog();
 			}
 		}
 	}
 
 	private void init() {
 		
+		btnHelp = (ImageView) findViewById(R.id.btnHelp);
 		btnSubmit = (Button) findViewById(R.id.btnSubmit);
 		btnBack = (Button) findViewById(R.id.btnBack);
 		scrollView = (ScrollView) findViewById(R.id.scrollView);
-		layoutBar = (ViewGroup) findViewById(R.id.readingBar);
 		layoutDialog = (ViewGroup) findViewById(R.id.dialogContent);
-		layoutQuestion = (ViewGroup) findViewById(R.id.questionContent);
 		tvDialogContent = (TextView) findViewById(R.id.tvDialogContent);
 		viewFlipper = (ViewFlipper) findViewById(R.id.viewFlipper);
 		imgDialog = (ImageView) findViewById(R.id.imgDialog);
@@ -140,6 +141,7 @@ public class ReadingScreen extends BaseSimpleToeicActivity implements IReadingHa
 		
 		btnBack.setOnClickListener(this);
 		btnSubmit.setOnClickListener(this);
+		btnHelp.setOnClickListener(this);
 		btnSubmit.setText("NEXT");
 		
 		scrollView.setOnTouchListener(new View.OnTouchListener() {
@@ -310,6 +312,9 @@ public class ReadingScreen extends BaseSimpleToeicActivity implements IReadingHa
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
+		case R.id.btnHelp:
+			showHintDialogOnBar();
+			break;
 		case R.id.btnSubmit:
 			
 			if(mCurrentIndexQuestion < mTotalQuestionDialog){
