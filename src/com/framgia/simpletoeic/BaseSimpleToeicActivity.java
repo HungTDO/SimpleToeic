@@ -3,12 +3,17 @@ package com.framgia.simpletoeic;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -148,6 +153,56 @@ public class BaseSimpleToeicActivity extends FragmentActivity {
 	// ======================= DIALOG MANAGER =======================
 
 	/**
+	 * Show hint dialog when go to Reading / Listening screen
+	 * */
+	protected void showHintDialog() {
+
+		View mHint = LayoutInflater.from(self).inflate(
+				R.layout.layout_confirm_hint, null);
+		final CheckBox cbShowHint = (CheckBox) mHint.findViewById(R.id.cbShowHint);
+		OnClickListener onOKDialog = new OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				boolean isCheck = cbShowHint.isChecked();
+				//is do not show hint again
+				putShowHint(!isCheck);
+			}
+		};
+
+		boolean isShowHint = getShowHint();
+		if(isShowHint)
+		{
+			cbShowHint.setChecked(!isShowHint);
+			AlertDialog.Builder builder = new AlertDialog.Builder(self);
+			builder.setView(mHint);
+			builder.setPositiveButton("OK", onOKDialog);
+			AlertDialog dialog = builder.create();
+			dialog.show();
+		}
+	}
+	
+	/**
+	 * Show help dialog when click Help button
+	 * @see BaseSimpleToeicActivity#showHintDialog
+	 * */
+	protected void showHintDialogOnBar() {
+
+		View mHint = LayoutInflater.from(self).inflate(
+				R.layout.layout_confirm_hint, null);
+		final CheckBox cbShowHint = (CheckBox) mHint
+				.findViewById(R.id.cbShowHint);
+		cbShowHint.setVisibility(View.GONE);
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(self);
+		builder.setView(mHint);
+		builder.setPositiveButton("OK", null);
+		AlertDialog dialog = builder.create();
+		dialog.show();
+	}
+	
+	
+	/**
 	 * Show confirm dialog
 	 * 
 	 * @param title
@@ -260,4 +315,19 @@ public class BaseSimpleToeicActivity extends FragmentActivity {
 		Toast.makeText(this, resId, time).show();
 	}
 
+	// ============SHAREPREFERCENCES=====================
+	
+	protected void putShowHint(Boolean values)
+	{
+		SharedPreferences preferences = getSharedPreferences("SETTINGS", MODE_PRIVATE);
+		SharedPreferences.Editor editor = preferences.edit();
+		editor.putBoolean("SHOW_HINT", values);
+		editor.commit();
+	}
+	
+	public boolean getShowHint()
+	{
+		SharedPreferences preferences = getSharedPreferences("SETTINGS", MODE_PRIVATE);
+		return preferences.getBoolean("SHOW_HINT", true);
+	}
 }
