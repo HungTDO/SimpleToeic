@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -35,6 +36,8 @@ public class BaseSimpleToeicActivity extends FragmentActivity {
 	protected BaseSimpleToeicActivity self;
 
 	protected SimpleToeicAppplication app;
+	
+	protected Resources res;
 
 	protected FragmentManager frgManager;
 
@@ -66,6 +69,7 @@ public class BaseSimpleToeicActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		// App content
 		self = this;
+		res = getResources();
 		app = (SimpleToeicAppplication) getApplication();
 		frgManager = getSupportFragmentManager();
 		openDatabase();

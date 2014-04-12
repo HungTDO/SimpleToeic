@@ -42,7 +42,7 @@ public class ResultScreen extends BaseSimpleToeicActivity {
 		Bundle bundle = getIntent().getExtras();
 		if(bundle != null){
 			//Fill data
-			String name = bundle.getString(Keys.BKEY_PART_NAME, "Reading Test");
+			String name = bundle.getString(Keys.BKEY_PART_NAME);
 			int partId = bundle.getInt(Keys.BKEY_PARTID, 0);
 			int maxQuestion = bundle.getInt(Keys.BKEY_TOTAL_QUESTION, 0);
 			int correct = bundle.getInt(Keys.BKEY_TRUE_ANSWER, 0);
