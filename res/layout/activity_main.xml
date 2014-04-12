@@ -38,7 +38,8 @@
                 android:layout_height="match_parent"
                 android:cacheColorHint="@color/color_transparent"
                 android:divider="#E0E0E0"
-                android:dividerHeight="1dp" />
+                android:dividerHeight="1dp" 
+                android:background="@drawable/logo_person"/>
         </LinearLayout>
 
         <LinearLayout
