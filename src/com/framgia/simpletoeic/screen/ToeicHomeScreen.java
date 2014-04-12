@@ -1,6 +1,7 @@
 package com.framgia.simpletoeic.screen;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import android.database.Cursor;
 import android.os.Bundle;
@@ -40,6 +41,7 @@ public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
 	/**Type for Listening*/
 	private static final int TYPE_LISTENING = 1;
 	
+	/**Type for Menus, default is Reading*/
 	private EMenu currentMenu = EMenu.READING;
 	
 	/**Current Exam Type*/
@@ -57,7 +59,17 @@ public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
 	
 	private int examId = 0;
 	
+	private static final int[] sprite;
 
+	static {
+
+		sprite = new int[] { R.drawable.logo_alarm, R.drawable.logo_headphone,
+				R.drawable.logo_kanguru, R.drawable.logo_listening,
+				R.drawable.logo_miniscope, R.drawable.logo_person,
+				R.drawable.logo_backelor_hat, R.drawable.logo_book,
+				R.drawable.logo_books, R.drawable.logo_fairy };
+	}
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -129,6 +141,10 @@ public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
 			mCursorExamShowAll.close();
 			ListExamAdapter adapter = new ListExamAdapter(self, listObject, false);
 			lvExam.setAdapter(adapter);
+			//Random sprite
+			Random random = new Random();
+			int index = random.nextInt(sprite.length-1);
+			lvExam.setBackgroundResource(sprite[index]);
 			Debugger.i("DB -> Exam adapter count: "
 					+ lvExam.getAdapter().getCount());
 		}

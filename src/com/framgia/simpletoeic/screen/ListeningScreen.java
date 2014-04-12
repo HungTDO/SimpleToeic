@@ -110,7 +110,7 @@ public class ListeningScreen extends BaseSimpleToeicActivity implements IReading
 		
 		Bundle b = getIntent().getExtras();
 		if (b != null) {
-			String partName = b.getString(Keys.BKEY_PART_NAME, "Reading Test");
+			String partName = b.getString(Keys.BKEY_PART_NAME);
 			partID = b.getInt(Keys.BKEY_PARTID);
 			tvReadingHeader.setText(partName);
 			Cursor cursor = dialogDAO.getDialogByPartID(partID);
