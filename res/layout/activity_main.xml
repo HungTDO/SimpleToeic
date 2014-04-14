@@ -25,6 +25,10 @@
             <TextView
                 android:id="@+id/tvPartHeader"
                 style="@style/style_menu_button"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:drawableLeft="@drawable/ic_reading"
+                android:drawablePadding="5dp"
                 android:text="@string/text_menu_read"
                 android:textStyle="bold" />
 
@@ -36,6 +40,7 @@
                 android:id="@+id/listExam"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@drawable/logo_person"
                 android:cacheColorHint="@color/color_transparent"
                 android:divider="#E0E0E0"
                 android:dividerHeight="1dp" />

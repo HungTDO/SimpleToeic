@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_white"
+        android:orientation="vertical"
+        android:padding="3dp" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="How to use?"
+            android:textColor="@color/color_menu_bkg"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginTop="5dp"
+                android:contentDescription="@string/app_name"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_unlock"
+                android:visibility="visible" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/ic_arrow"
+                android:contentDescription="@string/app_name"
+                android:visibility="visible" />
+
+            <ImageView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginTop="5dp"
+                android:contentDescription="@string/app_name"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_lock"
+                android:visibility="visible" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="Please press Confirm button to calculated score. If is not confirm, this answer is false. "
+            android:textColor="@color/color_black"
+            android:textSize="14sp" />
+
+        <View
+            style="@style/style_menu_devide"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/btnBack"
+                style="@style/style_button_reading"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="2dp"
+                android:text="BACK"
+                android:textColor="@color/color_white" />
+
+            <Button
+                android:id="@+id/btnSubmit"
+                style="@style/style_button_reading"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="2dp"
+                android:text="NEXT"
+                android:textColor="@color/color_white" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="Please press Next and Back button to switch between questions in a Dialog"
+            android:textColor="@color/color_black"
+            android:textSize="14sp" />
+
+        <View
+            style="@style/style_menu_devide"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp" />
+
+        <ImageView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="5dp"
+            android:contentDescription="@string/app_name"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_dialog"
+            android:visibility="visible" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="When switching to another dialog, no way back dialog before"
+            android:textColor="@color/color_black"
+            android:textSize="14sp" />
+
+        <CheckBox
+            android:id="@+id/cbShowHint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginTop="5dp"
+            android:checked="false"
+            android:text="Do not show again"
+            android:textColor="@color/color_blue"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+</ScrollView>

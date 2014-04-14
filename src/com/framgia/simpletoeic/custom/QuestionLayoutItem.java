@@ -29,7 +29,7 @@ public class QuestionLayoutItem extends LinearLayout {
 
 	private ImageView imgConfirm;
 
-	private TextView tvQuestion;
+	private TextView tvQuestion, tvPage;
 
 	private RadioGroup radioGroup;
 
@@ -51,6 +51,7 @@ public class QuestionLayoutItem extends LinearLayout {
 		inflate(context, R.layout.question_item, this);
 
 		tvQuestion = (TextView) findViewById(R.id.tvQuestion);
+		tvPage = (TextView) findViewById(R.id.tvPage);
 		radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
 		imgConfirm = (ImageView) findViewById(R.id.imgConfirm);
 		rdoA = (RadioButton) findViewById(R.id.radioA);
@@ -151,6 +152,15 @@ public class QuestionLayoutItem extends LinearLayout {
 	 * */
 	public boolean isCorrect() {
 		return mCorrect;
+	}
+	
+	/**
+	 * Set current page
+	 * @param strPage
+	 * */
+	public void setCurrentPage(String strPage){
+		//Set Page
+		tvPage.setText(strPage);
 	}
 
 }
