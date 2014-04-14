@@ -239,7 +239,7 @@ public class ReadingScreen extends BaseSimpleToeicActivity implements IReadingHa
 					int quesC = mCursorQuestion.getColumnIndex(QUESTION_ANS_C);
 					int quesD = mCursorQuestion.getColumnIndex(QUESTION_ANS_D);
 					int correct = mCursorQuestion.getColumnIndex(QUESTION_ANS_CORRECT);
-					
+					int count = 1;
 					while (mCursorQuestion.moveToNext()) {
 						int mQId = mCursorQuestion.getInt(quesId);
 						String mQues = mCursorQuestion.getString(quesQues);
@@ -255,8 +255,10 @@ public class ReadingScreen extends BaseSimpleToeicActivity implements IReadingHa
 						listQuestion.add(mQuestion);
 						
 						QuestionLayoutItem mQuestionView = new QuestionLayoutItem(self, mQuestion);
+						mQuestionView.setCurrentPage(count + "/" + mTotalQuestionDialog);
 						viewFlipper.addView(mQuestionView);
 						mMaxQuestion++;
+						count++;
 					}
 					
 					//Default
