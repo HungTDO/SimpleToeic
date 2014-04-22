@@ -211,16 +211,12 @@ public class ListeningScreen extends BaseSimpleToeicActivity implements IReading
 
 	private void removeAudio()
 	{
-		if(mp != null)
+		if(mp != null && mp.isPlaying())
 		{
-			if(mp.isPlaying())
-			{
-				mp.stop();
-				mp.release();
-				mp = null;
-				Debugger.i("AUDIO_RELEASED");
-			}
-			
+			mp.stop();
+			mp.release();
+			mp = null;
+			Debugger.i("AUDIO_RELEASED");
 		}
 	}
 	
@@ -331,7 +327,7 @@ public class ListeningScreen extends BaseSimpleToeicActivity implements IReading
 					imgDialog.setVisibility(View.GONE);
 				}
 				
-
+				//Load Questions
 				Cursor mCursorQuestion = questionDAO
 						.getQuestionByDialogId(dialogId);
 				if (mCursorQuestion != null) {
@@ -349,7 +345,7 @@ public class ListeningScreen extends BaseSimpleToeicActivity implements IReading
 					int quesC = mCursorQuestion.getColumnIndex(QUESTION_ANS_C);
 					int quesD = mCursorQuestion.getColumnIndex(QUESTION_ANS_D);
 					int correct = mCursorQuestion.getColumnIndex(QUESTION_ANS_CORRECT);
-					
+					int count = 1;
 					while (mCursorQuestion.moveToNext()) {
 						int mQId = mCursorQuestion.getInt(quesId);
 						String mQues = mCursorQuestion.getString(quesQues);
@@ -365,8 +361,10 @@ public class ListeningScreen extends BaseSimpleToeicActivity implements IReading
 						listQuestion.add(mQuestion);
 						
 						QuestionLayoutItem mQuestionView = new QuestionLayoutItem(self, mQuestion);
+						mQuestionView.setCurrentPage(count + "/" + mTotalQuestionDialog);
 						viewFlipper.addView(mQuestionView);
 						mMaxQuestion++;
+						count++;
 					}
 					
 					//Default
