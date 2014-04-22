@@ -15,6 +15,7 @@
 
     <!-- MESSAGE -->
     <string name="message_are_you_sure">Are you sure?</string>
+    <string name="message_do_not_show">Do not show again</string>
 
     <!-- TIP MESSAGE -->
     <string name="reading_direction">In the Reading test, you will read a variety of texts and answer several different types of reading comprehension questions. The entire Reading test will last 75 minutes. There are three parts, and directions are given for each part. You are encouraged to answer as many questions as possible within the time allowed.</string>
@@ -26,6 +27,11 @@
     <string name="listening_direction_part2">You will hear a question or statement and three responses spoken in English. They will not be printed in your test book and will be spoken only one time. Select the best response to the question or statement and mark the letter (A), (B), or (C) on your answer sheet.</string>
     <string name="listening_direction_part3">You will hear some conversations between two people. You will be asked to answer three questions about what the speakers say in each conversation. Select the best response to each question and mark the letter (A), (B), (C), or (D) on your answer sheet. The conversations will not be printed in your test book and will be spoken only one time.</string>
     <string name="listening_direction_part4">You will hear some talks given by a single speaker. You will be asked to answer three questions about what the speaker says in each talk. Select the best response to each question and mark the letter (A), (B), (C), or (D) on your answer sheet. The talks will not be printed in your test book and will be spoken only one time. </string>
+    
+    <!-- TUT MESSAGE -->
+    <string name="tut1">After chooing the answer, please press "Confirm Button". Without this your answer will not be checked.</string>
+    <string name="tut2">Inside a Dialog, press Next or Back button to change the questions.</string>
+    <string name="tut3">Notice: Can not go back to the previous dialogs.</string>
     
     <!-- STRING RESULT -->
     <string name="text_score">Score: %1$d/%2$d</string>
