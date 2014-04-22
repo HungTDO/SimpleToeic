@@ -12,7 +12,7 @@
         <item name="android:background">@color/color_menu_bkg</item>
         <item name="android:textColor">@color/color_menu_text</item>
         <item name="android:textSize">18sp</item>
-        <item name="android:gravity">center</item>
+        <item name="android:gravity">left|center_vertical</item>
     </style>
 
     <style name="style_menu_devide">

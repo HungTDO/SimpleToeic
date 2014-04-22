@@ -12,6 +12,8 @@
         <Button
             android:id="@+id/btnRead"
             style="@style/style_menu_button"
+            android:drawableLeft="@drawable/ic_reading"
+            android:drawablePadding="5dp"
             android:text="@string/text_menu_read"/>
 
         <View style="@style/style_menu_devide" />
@@ -19,6 +21,8 @@
         <Button
             android:id="@+id/btnListen"
             style="@style/style_menu_button"
+            android:drawableLeft="@drawable/ic_listening"
+            android:drawablePadding="5dp"
             android:text="@string/text_menu_listen" />
 
         <View style="@style/style_menu_devide" />
@@ -26,20 +30,24 @@
         <Button
             android:id="@+id/btnTip"
             style="@style/style_menu_button"
+            android:drawableLeft="@drawable/ic_tip"
+            android:drawablePadding="5dp"
             android:text="@string/text_menu_tip" />
 
         <View style="@style/style_menu_devide" />
 
-        <Button
+        <!-- <Button
             android:id="@+id/btnSetting"
             style="@style/style_menu_button"
-            android:text="@string/text_menu_setting" />
+            android:text="@string/text_menu_setting" /> -->
 
         <View style="@style/style_menu_devide" />
 
         <Button
             android:id="@+id/btnAbout"
             style="@style/style_menu_button"
+            android:drawableLeft="@drawable/ic_about"
+            android:drawablePadding="5dp"
             android:text="@string/text_menu_about" />
     </LinearLayout>
 

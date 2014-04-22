@@ -7,5 +7,5 @@ package com.framgia.simpletoeic.ie;
  * */
 public enum EMenu {
 
-	READING, LISTENING, TIP, SETTINGS, ABOUT
+	READING, LISTENING, TIP, SETTINGS, ABOUT, RATE, MOREAPP;
 }

@@ -218,11 +218,8 @@ public class ToeicHomeScreen extends BaseSimpleToeicActivity implements
 		case TIP:
 			goActivity(self, TipScreen.class);
 			break;
-		case SETTINGS:
-
-			break;
 		case ABOUT:
-
+			goActivity(self, AboutScreen.class);
 			break;
 
 		default:
