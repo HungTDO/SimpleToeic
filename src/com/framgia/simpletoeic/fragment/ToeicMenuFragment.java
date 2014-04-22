@@ -20,7 +20,7 @@ public class ToeicMenuFragment extends Fragment implements OnClickListener {
 
 	private FragmentActivity parent;
 
-	private Button btnRead, btnListen, btnTip, btnSetting, btnAbout;
+	private Button btnRead, btnListen, btnTip, btnAbout;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -53,13 +53,13 @@ public class ToeicMenuFragment extends Fragment implements OnClickListener {
 		btnRead = (Button) parent.findViewById(R.id.btnRead);
 		btnListen = (Button) parent.findViewById(R.id.btnListen);
 		btnTip = (Button) parent.findViewById(R.id.btnTip);
-		btnSetting = (Button) parent.findViewById(R.id.btnSetting);
+//		btnSetting = (Button) parent.findViewById(R.id.btnSetting);
 		btnAbout = (Button) parent.findViewById(R.id.btnAbout);
 
 		btnRead.setOnClickListener(this);
 		btnListen.setOnClickListener(this);
 		btnTip.setOnClickListener(this);
-		btnSetting.setOnClickListener(this);
+//		btnSetting.setOnClickListener(this);
 		btnAbout.setOnClickListener(this);
 
 	}
@@ -76,9 +76,9 @@ public class ToeicMenuFragment extends Fragment implements OnClickListener {
 		case R.id.btnTip:
 			menuProcessing.onFragToActivity(EMenu.TIP);
 			break;
-		case R.id.btnSetting:
-			menuProcessing.onFragToActivity(EMenu.SETTINGS);
-			break;
+//		case R.id.btnSetting:
+//			menuProcessing.onFragToActivity(EMenu.SETTINGS);
+//			break;
 		case R.id.btnAbout:
 			menuProcessing.onFragToActivity(EMenu.ABOUT);
 			break;

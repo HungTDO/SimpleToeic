@@ -43,6 +43,10 @@
             android:name=".screen.ResultScreen"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
+        <activity
+            android:name=".screen.AboutScreen"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
     </application>
 
 </manifest>

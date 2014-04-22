@@ -58,6 +58,7 @@
             <TextView
                 android:id="@+id/tvPartName"
                 style="@style/style_menu_button"
+                android:gravity="center"
                 android:onClick="onClickTitle"
                 android:text="@string/text_part"
                 android:textStyle="bold" />
